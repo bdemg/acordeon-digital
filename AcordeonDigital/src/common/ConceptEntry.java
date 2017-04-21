@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Jorge A. Cano
  */
-public class ConceptEntry implements Serializable{
+public class ConceptEntry implements Serializable, Comparable<ConceptEntry>{
     
     private String conceptName;
     private String category;
@@ -64,6 +64,16 @@ public class ConceptEntry implements Serializable{
     public void setDefinition(String definition) {
         this.definition = definition;
     }
+
+    @Override
+    public String toString() {
+        return this.category + " - " + this.conceptName;
+    }
+
     
+    @Override
+    public int compareTo(ConceptEntry conceptEntry) {
+        return this.conceptName.compareTo(conceptEntry.getConceptName());
+    }
     
 }
