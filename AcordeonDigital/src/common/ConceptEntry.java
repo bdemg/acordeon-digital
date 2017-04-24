@@ -13,11 +13,13 @@ import java.io.Serializable;
  */
 public class ConceptEntry implements Serializable, Comparable<ConceptEntry>{
     
+    private int id;
     private String conceptName;
     private String category;
     private String definition;
 
-    public ConceptEntry(String conceptName, String category, String definition) {
+    public ConceptEntry(int id, String conceptName, String category, String definition) {
+        this.id = id;
         this.conceptName = conceptName;
         this.category = category;
         this.definition = definition;
@@ -64,6 +66,14 @@ public class ConceptEntry implements Serializable, Comparable<ConceptEntry>{
     public void setDefinition(String definition) {
         this.definition = definition;
     }
+    
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+    
 
     @Override
     public String toString() {

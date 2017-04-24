@@ -23,7 +23,7 @@ public interface SeverInterface extends Remote {
     
     public ConceptEntry[] getAllConceptEntrys() throws RemoteException;
     
-    public void updateConceptDefinition(ConceptEntry updatedConceptEntry, int userId) throws RemoteException;
+    public boolean updateConceptDefinition(ConceptEntry updatedConceptEntry, int userId) throws RemoteException;
     
-    public void deleteConcepEntry(ConceptEntry conceptEntry, int userId) throws RemoteException;
+    public boolean deleteConcepEntry(ConceptEntry conceptEntry, int userId) throws RemoteException;
 }
