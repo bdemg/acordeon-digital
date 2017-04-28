@@ -6,6 +6,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -41,7 +42,7 @@ public class RunServer {
             Naming.rebind(registryURL, exportedObj);
             System.out.println("Server ready.");
         }// end try
-        catch (Exception re) {
+        catch (IOException | NumberFormatException re) {
             re.printStackTrace();
         } // end catch
     }
