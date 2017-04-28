@@ -25,7 +25,7 @@ public class UsersDAO extends DatabaseDAO{
         super();
     }
     
-    public static UsersDAO getCreationsDAO() throws SQLException{
+    public static UsersDAO getUsersDAO() throws SQLException{
         
         if(usersDAO == null){
             usersDAO = new UsersDAO();
