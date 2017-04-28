@@ -20,8 +20,6 @@ public class UsersDAO extends DatabaseDAO{
     private final String GET_USER_ID = 
             "SELECT user_id FROM users WHERE name=? AND password=?";
     
-    private final int USER_NOT_FOUND = -420;
-    
     private UsersDAO() throws SQLException{
         
         super();
@@ -54,7 +52,7 @@ public class UsersDAO extends DatabaseDAO{
         }
         else{
             
-            return this.USER_NOT_FOUND;
+            return DAOErrorCodes.USER_NOT_FOUND;
         }
     }
 }

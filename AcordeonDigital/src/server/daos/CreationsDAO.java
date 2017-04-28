@@ -17,6 +17,9 @@ public class CreationsDAO extends DatabaseDAO{
     private final String INSERT_CREATION_QUERY = 
             "INSERT INTO creation (user_id, concept_id, creation_date) VALUES (?,?,?)";
     
+    private final String GET_CREATOR_ID_QUERY =
+            "SELECT user_id FROM creation WHERE concept_id=?";
+    
     private CreationsDAO() throws SQLException{
         
         super();
@@ -45,4 +48,24 @@ public class CreationsDAO extends DatabaseDAO{
         queryStatement.execute();
     }
     
+    public int getConceptCreatorID(int conceptID) throws SQLException{
+        
+        PreparedStatement queryStatement = (PreparedStatement)
+                super.connectionToDatabase.prepareStatement( this.GET_CREATOR_ID_QUERY );
+        
+        queryStatement.setInt(1, conceptID);
+        
+        ResultSet resultSet = queryStatement.executeQuery();
+        
+        boolean wasCreatorFound = resultSet.last();
+        
+        if(wasCreatorFound){
+            
+            return resultSet.getInt("user_id");
+        }
+        else{
+            
+            return DAOErrorCodes.USER_NOT_FOUND;
+        }
+    }
 }
