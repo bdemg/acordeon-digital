@@ -5,6 +5,8 @@
  */
 package client;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 
 /**
@@ -20,6 +22,23 @@ public class AcordeonSheet extends javax.swing.JFrame {
         
         initComponents();
         this.table_Concepts.setAutoCreateRowSorter(true);
+        
+        this.table_Concepts.addMouseListener( new MouseAdapter(){
+            
+            @Override
+            public void mouseClicked( MouseEvent input_event ){
+                
+                if( input_event.getClickCount() == 2 ){
+                    
+                    JTable target = (JTable) input_event.getSource();
+                    int row = target.getSelectedRow();
+                    System.out.println( target.getModel().getValueAt(row, 0) );
+                    System.out.println( target.getModel().getValueAt(row, 1) );
+                    System.out.println( target.getModel().getValueAt(row, 2) );
+                    System.out.println( target.getModel().getValueAt(row, 3) );
+                }
+            }
+        });
     }
 
     /**

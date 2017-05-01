@@ -56,15 +56,9 @@ public class AcordeonList extends DefaultTableModel{
         return columnClass;
     }
     
-    
     @Override
-    public Object getValueAt( int input_row, int input_column ) {
-        if( input_column == 0 ) {
-            
-            return input_row + 1; 
-        } else{
-            
-            return super.getValueAt( input_row, input_column );
-        }
+    public boolean isCellEditable(int input_row, int input_column) {
+        
+        return false;
     }
 }
