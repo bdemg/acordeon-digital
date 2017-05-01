@@ -5,10 +5,11 @@
  */
 package client;
 
+import client.login.LoginController;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.rmi.Naming;
-import server.SeverInterface;
+import server.ServerInterface;
 
 /**
  *
@@ -37,16 +38,15 @@ public class Client {
                     = "rmi://localhost:" + portNum + "/callback";
             // find the remote object and cast it to an 
             //   interface object
-            SeverInterface server
-                    = (SeverInterface) Naming.lookup(registryURL);
+            ServerInterface server
+                    = (ServerInterface) Naming.lookup(registryURL);
             System.out.println("Lookup completed ");
 
-            AcordeonController callbackObj
-                    = new AcordeonController(server);
+            LoginController callbackObj = new LoginController(server);
             // register for callback
             //***IMPORTANTE ---> *** server.registerForCallback(callbackObj);
             System.out.println("Registered for callback.");
-        } // end try 
+        } // end try  // end try 
         catch (Exception e) {
             System.out.println(
                     "Exception in CallbackClient: " + e);

@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
  *
  * @author Jorge A. Cano
  */
-public interface SeverInterface extends Remote {
+public interface ServerInterface extends Remote {
     
     public int getUserId(String userName, String password) throws RemoteException;
     
@@ -25,5 +25,5 @@ public interface SeverInterface extends Remote {
     
     public boolean updateConceptDefinition(ConceptEntry updatedConceptEntry, int userId) throws RemoteException;
     
-    public boolean deleteConcepEntry(ConceptEntry conceptEntry, int userId) throws RemoteException;
+    public boolean deleteConceptEntry(ConceptEntry conceptEntry, int userId) throws RemoteException;
 }
