@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-05-2017 a las 23:52:34
+-- Tiempo de generación: 02-05-2017 a las 00:13:59
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -147,16 +147,17 @@ ALTER TABLE `users`
 --
 
 --
--- Filtros para la tabla `concepts`
+-- Filtros para la tabla `creation`
 --
-ALTER TABLE `concepts`
-  ADD CONSTRAINT `concepts2creation` FOREIGN KEY (`concept_id`) REFERENCES `creation` (`concept_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `concepts2edition` FOREIGN KEY (`concept_id`) REFERENCES `editions` (`concept_id`) ON DELETE CASCADE;
+ALTER TABLE `creation`
+  ADD CONSTRAINT `concepts2creation` FOREIGN KEY (`concept_id`) REFERENCES `concepts` (`concept_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `users2creations` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `editions`
 --
 ALTER TABLE `editions`
+  ADD CONSTRAINT `concepts2edition` FOREIGN KEY (`concept_id`) REFERENCES `concepts` (`concept_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `users2editions` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
