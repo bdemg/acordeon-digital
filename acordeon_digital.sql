@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-04-2017 a las 23:50:40
+-- Tiempo de generación: 01-05-2017 a las 23:31:36
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -60,6 +60,19 @@ CREATE TABLE `editions` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `eliminations`
+--
+
+CREATE TABLE `eliminations` (
+  `user_id` int(11) NOT NULL,
+  `concept_name` varchar(25) NOT NULL,
+  `category` varchar(25) NOT NULL,
+  `elimination_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `users`
 --
 
@@ -94,6 +107,12 @@ ALTER TABLE `editions`
   ADD PRIMARY KEY (`user_id`,`concept_id`,`edit_date`),
   ADD KEY `concept_id` (`concept_id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indices de la tabla `eliminations`
+--
+ALTER TABLE `eliminations`
+  ADD PRIMARY KEY (`user_id`,`concept_name`,`elimination_date`);
 
 --
 -- Indices de la tabla `users`
