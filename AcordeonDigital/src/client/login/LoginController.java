@@ -54,7 +54,7 @@ public class LoginController extends UnicastRemoteObject implements ActionListen
             String username = this.view.getTxtf_user().getText();
             String password = this.view.getPswdf_password().getText();
             
-            int responseValue = UsersDAO.getUsersDAO().getUserID(username, password);
+            int responseValue = this.server.getUserId(username, password);
             
             if( responseValue == DAOErrorCodes.USER_NOT_FOUND ){
                 
@@ -62,12 +62,10 @@ public class LoginController extends UnicastRemoteObject implements ActionListen
             }
             else{
                 
+                this.view.dispose();
                 AcordeonController callbackObj = new AcordeonController(server);
             }
             
-        } catch (SQLException ex) {
-            
-            ex.printStackTrace();
         } catch (RemoteException ex) {
             
             ex.printStackTrace();

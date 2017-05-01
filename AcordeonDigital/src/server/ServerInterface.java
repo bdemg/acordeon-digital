@@ -25,5 +25,5 @@ public interface ServerInterface extends Remote {
     
     public boolean updateConceptDefinition(ConceptEntry updatedConceptEntry, int userId) throws RemoteException;
     
-    public boolean deleteConcepEntry(ConceptEntry conceptEntry, int userId) throws RemoteException;
+    public boolean deleteConceptEntry(ConceptEntry conceptEntry, int userId) throws RemoteException;
 }

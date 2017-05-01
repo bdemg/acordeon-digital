@@ -109,7 +109,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
     }
 
     @Override
-    public boolean deleteConcepEntry(ConceptEntry conceptEntry, int userId) throws RemoteException {
+    public boolean deleteConceptEntry(ConceptEntry conceptEntry, int userId) throws RemoteException {
 
         boolean isConceptBeingEdited = this.conceptsBeingEdited.contains(conceptEntry.getId());
 
