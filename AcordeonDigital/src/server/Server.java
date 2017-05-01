@@ -8,7 +8,15 @@ package server;
 import common.ConceptEntry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import server.daos.ConceptsDAO;
+import server.daos.CreationsDAO;
+import server.daos.DAOErrorCodes;
+import server.daos.EditionsDAO;
+import server.daos.UsersDAO;
 
 /**
  *
@@ -26,16 +34,30 @@ public class Server extends UnicastRemoteObject implements SeverInterface{
     @Override
     public int getUserId(String userName, String password) throws RemoteException {
         
-        //llamada a un DAO para obtener la id del usuario
-        //si no se encuentra la id se regresa -1 para indicar que no se encontró
-        return -1;
+        try {
+            return UsersDAO.getUsersDAO().getUserID(userName, password);
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return DAOErrorCodes.USER_NOT_FOUND;
     }
 
     @Override
     public void addNewConcept(ConceptEntry conceptEntry, int userId) throws RemoteException {
         
-        //Se llama a un DAO para guardar el nuevo concepto
-        //Se crea una entrada en el registro de creación de conceptos
+        try {
+            //Se llama a un DAO para guardar el nuevo concepto
+            ConceptsDAO conceptsDAO = ConceptsDAO.getConceptsDAO();
+            
+            conceptsDAO.registerNewConcept(conceptEntry);
+            
+            //Se crea una entrada en el registro de creación de conceptos
+            int newConceptID = conceptsDAO.getConceptID(conceptEntry.getConceptName());
+            CreationsDAO.getCreationsDAO().registerNewConceptCreation(userId, newConceptID);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -46,7 +68,12 @@ public class Server extends UnicastRemoteObject implements SeverInterface{
     @Override
     public ConceptEntry[] getAllConceptEntrys() throws RemoteException {
         
-        //llamada a un DAO para obtener la lista de todos los conceptos
+        try {
+            //llamada a un DAO para obtener la lista de todos los conceptos
+            return ConceptsDAO.getConceptsDAO().getAllConcepts();
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
@@ -59,10 +86,20 @@ public class Server extends UnicastRemoteObject implements SeverInterface{
         if(!isConceptBeingEdited){
             
             this.conceptsBeingEdited.add(updatedConceptEntry.getId());
-            //llamada al DAO para actualizar el concepto
+            
+            try {
+                
+                //llamada al DAO para actualizar el concepto
+                ConceptsDAO.getConceptsDAO().updateConceptDefinition(updatedConceptEntry);
+                
+                //llamada al DAO para registrar una modificación
+                EditionsDAO.getEditionsDAO().registerConceptEdition(userId, updatedConceptEntry.getId());
+            } catch (SQLException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             this.conceptsBeingEdited.remove(updatedConceptEntry.getId());
             
-            //llamada al DAO para registrar una modificación
             return true;
         }else{
             
@@ -79,7 +116,17 @@ public class Server extends UnicastRemoteObject implements SeverInterface{
         if(!isConceptBeingEdited){
             
             this.conceptsBeingEdited.add(conceptEntry.getId());
-            //llamada al DAO para eliminar el concepto
+            
+            try {
+                //llamada al DAO para eliminar el concepto
+                ConceptsDAO.getConceptsDAO().deleteConceptEntry(conceptEntry.getId());
+                
+                //registrar el concepto que se eliminó
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             this.conceptsBeingEdited.remove(conceptEntry.getId());
             return true;
         }else{
