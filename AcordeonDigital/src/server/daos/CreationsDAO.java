@@ -20,6 +20,12 @@ public class CreationsDAO extends DatabaseDAO{
     private final String GET_CREATOR_ID_QUERY =
             "SELECT user_id FROM creation WHERE concept_id=?";
     
+    private final String GET_CREATION_ENTRYS =
+            "SELECT name, concept_name, creation_date FROM users u JOIN "
+            + "(SELECT c.creation_date, c.user_id, cc.concept_name FROM "
+            + "creation c JOIN concepts cc ON c.concept_id=cc.concept_id) "
+            + "R ON R.user_id=u.user_id";
+    
     private CreationsDAO() throws SQLException{
         
         super();
