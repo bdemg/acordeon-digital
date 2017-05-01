@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-05-2017 a las 23:31:36
+-- Tiempo de generación: 01-05-2017 a las 23:52:34
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -83,6 +83,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Volcado de datos para la tabla `users`
+--
+
+INSERT INTO `users` (`user_id`, `name`, `password`) VALUES
+(1, 'John', 'root');
+
+--
 -- Índices para tablas volcadas
 --
 
@@ -112,7 +119,8 @@ ALTER TABLE `editions`
 -- Indices de la tabla `eliminations`
 --
 ALTER TABLE `eliminations`
-  ADD PRIMARY KEY (`user_id`,`concept_name`,`elimination_date`);
+  ADD PRIMARY KEY (`user_id`,`concept_name`,`elimination_date`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indices de la tabla `users`
@@ -133,7 +141,7 @@ ALTER TABLE `concepts`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Restricciones para tablas volcadas
 --
@@ -146,11 +154,16 @@ ALTER TABLE `concepts`
   ADD CONSTRAINT `concepts2edition` FOREIGN KEY (`concept_id`) REFERENCES `editions` (`concept_id`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `users`
+-- Filtros para la tabla `editions`
 --
-ALTER TABLE `users`
-  ADD CONSTRAINT `users2creations` FOREIGN KEY (`user_id`) REFERENCES `creation` (`user_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `users2editions` FOREIGN KEY (`user_id`) REFERENCES `editions` (`user_id`) ON DELETE CASCADE;
+ALTER TABLE `editions`
+  ADD CONSTRAINT `users2editions` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `eliminations`
+--
+ALTER TABLE `eliminations`
+  ADD CONSTRAINT `users2eliminations` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

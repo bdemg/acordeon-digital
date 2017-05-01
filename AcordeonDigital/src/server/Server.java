@@ -16,24 +16,25 @@ import server.daos.ConceptsDAO;
 import server.daos.CreationsDAO;
 import server.daos.DAOErrorCodes;
 import server.daos.EditionsDAO;
+import server.daos.EliminationDAO;
 import server.daos.UsersDAO;
 
 /**
  *
  * @author Jorge A. Cano
  */
-public class Server extends UnicastRemoteObject implements SeverInterface{
+public class Server extends UnicastRemoteObject implements SeverInterface {
 
     private ArrayList<Integer> conceptsBeingEdited;
-    
-    public Server() throws RemoteException{
-        
+
+    public Server() throws RemoteException {
+
         conceptsBeingEdited = new ArrayList<>();
     }
 
     @Override
     public int getUserId(String userName, String password) throws RemoteException {
-        
+
         try {
             return UsersDAO.getUsersDAO().getUserID(userName, password);
         } catch (SQLException ex) {
@@ -44,17 +45,17 @@ public class Server extends UnicastRemoteObject implements SeverInterface{
 
     @Override
     public void addNewConcept(ConceptEntry conceptEntry, int userId) throws RemoteException {
-        
+
         try {
             //Se llama a un DAO para guardar el nuevo concepto
             ConceptsDAO conceptsDAO = ConceptsDAO.getConceptsDAO();
-            
+
             conceptsDAO.registerNewConcept(conceptEntry);
-            
+
             //Se crea una entrada en el registro de creación de conceptos
             int newConceptID = conceptsDAO.getConceptID(conceptEntry.getConceptName());
             CreationsDAO.getCreationsDAO().registerNewConceptCreation(userId, newConceptID);
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,7 +68,7 @@ public class Server extends UnicastRemoteObject implements SeverInterface{
 
     @Override
     public ConceptEntry[] getAllConceptEntrys() throws RemoteException {
-        
+
         try {
             //llamada a un DAO para obtener la lista de todos los conceptos
             return ConceptsDAO.getConceptsDAO().getAllConcepts();
@@ -79,59 +80,66 @@ public class Server extends UnicastRemoteObject implements SeverInterface{
 
     @Override
     public boolean updateConceptDefinition(ConceptEntry updatedConceptEntry, int userId) throws RemoteException {
-        
+
         boolean isConceptBeingEdited = this.conceptsBeingEdited.contains(updatedConceptEntry.getId());
-        
+
         //si el concepto no se está editando, se pone bajo edición y se guarda
-        if(!isConceptBeingEdited){
-            
+        if (!isConceptBeingEdited) {
+
             this.conceptsBeingEdited.add(updatedConceptEntry.getId());
-            
+
             try {
-                
+
                 //llamada al DAO para actualizar el concepto
                 ConceptsDAO.getConceptsDAO().updateConceptDefinition(updatedConceptEntry);
-                
+
                 //llamada al DAO para registrar una modificación
                 EditionsDAO.getEditionsDAO().registerConceptEdition(userId, updatedConceptEntry.getId());
             } catch (SQLException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             this.conceptsBeingEdited.remove(updatedConceptEntry.getId());
-            
+
             return true;
-        }else{
-            
+        } else {
+
             return false;
         }
     }
 
     @Override
     public boolean deleteConcepEntry(ConceptEntry conceptEntry, int userId) throws RemoteException {
-        
+
         boolean isConceptBeingEdited = this.conceptsBeingEdited.contains(conceptEntry.getId());
-        
-        //si el concepto no se está editando, se pone bajo edición y se elimina
-        if(!isConceptBeingEdited){
-            
-            this.conceptsBeingEdited.add(conceptEntry.getId());
-            
-            try {
+
+        try {
+
+            int conceptCreatorID = CreationsDAO.getCreationsDAO().getConceptCreatorID(conceptEntry.getId());
+            boolean isConceptCreator = conceptCreatorID == userId;
+
+            //si el concepto no se está editando, se pone bajo edición y se elimina
+            if (!isConceptBeingEdited && isConceptCreator) {
+
+                this.conceptsBeingEdited.add(conceptEntry.getId());
+                
                 //llamada al DAO para eliminar el concepto
                 ConceptsDAO.getConceptsDAO().deleteConceptEntry(conceptEntry.getId());
-                
+
                 //registrar el concepto que se eliminó
+                EliminationDAO.getEliminationDAO().registerElimination(conceptEntry, userId);
                 
-            } catch (SQLException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                this.conceptsBeingEdited.remove(conceptEntry.getId());
+                return true;
+            } else {
+
+                return false;
             }
-            
-            this.conceptsBeingEdited.remove(conceptEntry.getId());
-            return true;
-        }else{
-            
-            return false;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+        
+        return false;
+    }
 }
