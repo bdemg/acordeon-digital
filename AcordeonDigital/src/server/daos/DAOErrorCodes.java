@@ -12,4 +12,5 @@ package server.daos;
 public class DAOErrorCodes {
     
     public static final int USER_NOT_FOUND = -420;
+    public static final int CONCEPT_NOT_FOUND = -911;
 }
