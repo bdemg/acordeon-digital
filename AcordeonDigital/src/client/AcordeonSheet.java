@@ -5,6 +5,8 @@
  */
 package client;
 
+import javax.swing.JTable;
+
 /**
  *
  * @author Antonio Soto
@@ -15,7 +17,9 @@ public class AcordeonSheet extends javax.swing.JFrame {
      * Creates new form AcordeonSheet
      */
     public AcordeonSheet() {
+        
         initComponents();
+        this.table_Concepts.setAutoCreateRowSorter(true);
     }
 
     /**
@@ -28,12 +32,12 @@ public class AcordeonSheet extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table_Concepts = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new client.AcordeonList(0));
-        jScrollPane1.setViewportView(jTable1);
+        table_Concepts.setModel(new client.AcordeonList(0));
+        jScrollPane1.setViewportView(table_Concepts);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,6 +96,25 @@ public class AcordeonSheet extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table_Concepts;
     // End of variables declaration//GEN-END:variables
+
+    
+    public AcordeonList getAcordeonList() {
+        return ( AcordeonList ) this.table_Concepts.getModel();
+    }
+    
+    public void setAcordeonList( AcordeonList input_acordeonList ){
+        
+        this.table_Concepts.setModel( input_acordeonList );
+        //this.setTableLook();
+    }
+    
+    public JTable getTable_Concepts() {
+        return table_Concepts;
+    }
+
+    public void setTable_Concepts(JTable table_Concepts) {
+        this.table_Concepts = table_Concepts;
+    }
 }

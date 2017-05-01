@@ -67,6 +67,4 @@ public class AcordeonList extends DefaultTableModel{
             return super.getValueAt( input_row, input_column );
         }
     }
-    
-    
 }
