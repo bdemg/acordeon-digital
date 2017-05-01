@@ -5,6 +5,7 @@
  */
 package server.daos;
 
+import common.DAOErrorCodes;
 import common.ConceptEntry;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

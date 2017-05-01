@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.daos.ConceptsDAO;
 import server.daos.CreationsDAO;
-import server.daos.DAOErrorCodes;
+import common.DAOErrorCodes;
 import server.daos.EditionsDAO;
 import server.daos.EliminationDAO;
 import server.daos.UsersDAO;
@@ -23,7 +23,7 @@ import server.daos.UsersDAO;
  *
  * @author Jorge A. Cano
  */
-public class Server extends UnicastRemoteObject implements SeverInterface {
+public class Server extends UnicastRemoteObject implements ServerInterface {
 
     private ArrayList<Integer> conceptsBeingEdited;
 

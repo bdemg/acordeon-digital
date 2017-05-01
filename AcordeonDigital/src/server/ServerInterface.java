@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
  *
  * @author Jorge A. Cano
  */
-public interface SeverInterface extends Remote {
+public interface ServerInterface extends Remote {
     
     public int getUserId(String userName, String password) throws RemoteException;
     

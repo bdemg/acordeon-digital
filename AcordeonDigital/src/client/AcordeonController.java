@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import server.SeverInterface;
+import server.ServerInterface;
 
 /**
  *
@@ -13,9 +13,9 @@ import server.SeverInterface;
 public class AcordeonController extends UnicastRemoteObject implements ActionListener, ClientInterface{
     
     private final AcordeonSheet view;
-    private final SeverInterface server;
+    private final ServerInterface server;
     
-    public AcordeonController( SeverInterface server ) throws RemoteException{
+    public AcordeonController( ServerInterface server ) throws RemoteException{
         
         this.view = new AcordeonSheet();
         this.view.setLocationRelativeTo(null);
