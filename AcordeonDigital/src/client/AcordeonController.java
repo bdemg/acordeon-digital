@@ -3,10 +3,13 @@ package client;
 import common.ConceptEntry;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
 import server.ServerInterface;
 
 /**
@@ -21,23 +24,40 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     public AcordeonController( ServerInterface server ) throws RemoteException{
         
         this.view = new AcordeonSheet();
-        this.view.setLocationRelativeTo(null);
-        this.view.setResizable(false);
-        this.view.setVisible(true);
+        this.setTableProperties();
         
         this.server = server;
         //this.server.registerForCallback(this);
-        addActionListeners();
+        this.addActionListeners();
         this.fillTable();
     }
     
-    private void addActionListeners(){
+    private void setTableProperties(){
         
+        this.view.setLocationRelativeTo(null);
+        this.view.setResizable(false);
+        this.view.setVisible(true);
+        this.view.getTable_Concepts().setAutoCreateRowSorter(true);
         
+        this.view.getTable_Concepts().addMouseListener( new MouseAdapter(){
+            
+            @Override
+            public void mouseClicked( MouseEvent input_event ){
+                
+                if( input_event.getClickCount() == 2 ){
+                    
+                    JTable target = (JTable) input_event.getSource();
+                    int row = target.getSelectedRow();
+                    System.out.println( target.getModel().getValueAt(row, 0) );
+                    System.out.println( target.getModel().getValueAt(row, 1) );
+                    System.out.println( target.getModel().getValueAt(row, 2) );
+                    System.out.println( target.getModel().getValueAt(row, 3) );
+                }
+            }
+        });
     }
-
-    @Override
-    public void actionPerformed(ActionEvent event) {
+    
+    private void addActionListeners(){
         
         
     }
@@ -62,6 +82,12 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
             
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        
+        
     }
 
     @Override
