@@ -5,7 +5,9 @@
  */
 package server.daos;
 
+import common.AcordeonLogEntry;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -51,5 +53,43 @@ public class EditionsDAO extends DatabaseDAO{
         queryStatement.setTimestamp(3, new Timestamp( Calendar.getInstance().getTimeInMillis() ));
         
         queryStatement.execute();
+    }
+    
+    public AcordeonLogEntry[] getAllEditionLogs() throws SQLException{
+        
+         PreparedStatement queryStatement = (PreparedStatement)
+                super.connectionToDatabase.prepareStatement( this.GET_EDITION_ENTRYS );
+         
+         ResultSet resultSet = queryStatement.executeQuery();
+         
+         boolean hasResults = resultSet.last();
+         
+         if(hasResults){
+             
+             return resultsToLogEntryArray(resultSet);
+         } else {
+             
+            return null;
+        }
+    }
+
+    private AcordeonLogEntry[] resultsToLogEntryArray(ResultSet results) throws SQLException {
+        
+        results.last();
+        int totalLogCount = results.getRow();
+        AcordeonLogEntry[] logEntrys = new AcordeonLogEntry[totalLogCount];
+        results.first();
+        
+        for(int logCount = 0; logCount<totalLogCount; logCount++){
+            
+            logEntrys[logCount] = new AcordeonLogEntry(
+                    results.getString("name"),
+                    results.getString("concept_name"),
+                    results.getTimestamp("edit_date")
+            );
+            results.next();
+        }
+        
+        return logEntrys;
     }
 }

@@ -1,5 +1,7 @@
 package server.daos;
 
+import common.AcordeonLogEntry;
+import common.ConceptEntry;
 import common.DAOErrorCodes;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,5 +76,43 @@ public class CreationsDAO extends DatabaseDAO{
             
             return DAOErrorCodes.USER_NOT_FOUND;
         }
+    }
+    
+    public AcordeonLogEntry[] getAllCreationLogs() throws SQLException{
+        
+         PreparedStatement queryStatement = (PreparedStatement)
+                super.connectionToDatabase.prepareStatement( this.GET_CREATION_ENTRYS );
+         
+         ResultSet resultSet = queryStatement.executeQuery();
+         
+         boolean hasResults = resultSet.last();
+         
+         if(hasResults){
+             
+             return resultsToLogEntryArray(resultSet);
+         } else {
+             
+            return null;
+        }
+    }
+
+    private AcordeonLogEntry[] resultsToLogEntryArray(ResultSet results) throws SQLException {
+        
+        results.last();
+        int totalLogCount = results.getRow();
+        AcordeonLogEntry[] logEntrys = new AcordeonLogEntry[totalLogCount];
+        results.first();
+        
+        for(int logCount = 0; logCount<totalLogCount; logCount++){
+            
+            logEntrys[logCount] = new AcordeonLogEntry(
+                    results.getString("name"),
+                    results.getString("concept_name"),
+                    results.getTimestamp("creation_date")
+            );
+            results.next();
+        }
+        
+        return logEntrys;
     }
 }

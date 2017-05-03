@@ -5,8 +5,10 @@
  */
 package server.daos;
 
+import common.AcordeonLogEntry;
 import common.ConceptEntry;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -22,7 +24,7 @@ public class EliminationDAO extends DatabaseDAO{
     private final String INSERT_ELIMINATION_QUERY = 
             "INSERT INTO eliminations (user_id, concept_name, category, elimination_date ) VALUES (?,?,?,?)";
     
-    private final String GET_EDITION_ENTRYS =
+    private final String GET_ELIMINATION_ENTRYS =
             "SELECT name, concept_name, elimination_date FROM users u JOIN eliminations e ON u.user_id=e.user_id";
     
     private EliminationDAO() throws SQLException{
@@ -50,5 +52,43 @@ public class EliminationDAO extends DatabaseDAO{
         queryStatement.setTimestamp(4, new Timestamp(Calendar.getInstance().getTimeInMillis()));
         
         queryStatement.execute();
+    }
+    
+    public AcordeonLogEntry[] getAllEliminationLogs() throws SQLException{
+        
+         PreparedStatement queryStatement = (PreparedStatement)
+                super.connectionToDatabase.prepareStatement( this.GET_ELIMINATION_ENTRYS );
+         
+         ResultSet resultSet = queryStatement.executeQuery();
+         
+         boolean hasResults = resultSet.last();
+         
+         if(hasResults){
+             
+             return resultsToLogEntryArray(resultSet);
+         } else {
+             
+            return null;
+        }
+    }
+
+    private AcordeonLogEntry[] resultsToLogEntryArray(ResultSet results) throws SQLException {
+        
+        results.last();
+        int totalLogCount = results.getRow();
+        AcordeonLogEntry[] logEntrys = new AcordeonLogEntry[totalLogCount];
+        results.first();
+        
+        for(int logCount = 0; logCount<totalLogCount; logCount++){
+            
+            logEntrys[logCount] = new AcordeonLogEntry(
+                    results.getString("name"),
+                    results.getString("concept_name"),
+                    results.getTimestamp("elimination_date")
+            );
+            results.next();
+        }
+        
+        return logEntrys;
     }
 }
