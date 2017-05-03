@@ -30,7 +30,7 @@ public class LoginController extends UnicastRemoteObject implements ActionListen
         
         this.server = server;
         //this.server.registerForCallback(this);
-        addActionListeners();
+        this.addActionListeners();
     }
     
     private void addActionListeners(){
@@ -58,7 +58,9 @@ public class LoginController extends UnicastRemoteObject implements ActionListen
             
             if( responseValue == DAOErrorCodes.USER_NOT_FOUND ){
                 
-                ErrorMessager.callErrorMessager().showErrorMessage( ErrorMessager.CLIENT_NOT_FOUND );
+                ErrorMessager.callErrorMessager().showErrorMessage(ErrorMessager.USER_NOT_FOUND );
+                this.view.getTxtf_user().setText("");
+                this.view.getPswdf_password().setText("");
             }
             else{
                 

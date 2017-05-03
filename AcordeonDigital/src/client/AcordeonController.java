@@ -1,5 +1,7 @@
 package client;
 
+import client.add.AddController;
+import client.mod.ModController;
 import common.ConceptEntry;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,11 +26,11 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     public AcordeonController( ServerInterface server ) throws RemoteException{
         
         this.view = new AcordeonSheet();
-        this.setTableProperties();
         
         this.server = server;
         //this.server.registerForCallback(this);
         this.addActionListeners();
+        this.setTableProperties();
         this.fillTable();
     }
     
@@ -48,10 +50,15 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
                     
                     JTable target = (JTable) input_event.getSource();
                     int row = target.getSelectedRow();
-                    System.out.println( target.getModel().getValueAt(row, 0) );
-                    System.out.println( target.getModel().getValueAt(row, 1) );
-                    System.out.println( target.getModel().getValueAt(row, 2) );
-                    System.out.println( target.getModel().getValueAt(row, 3) );
+                    
+                    ConceptEntry concept = new ConceptEntry( 
+                            (int)target.getModel().getValueAt(row, 0), 
+                            (String)target.getModel().getValueAt(row, 1),
+                            (String)target.getModel().getValueAt(row, 2),
+                            (String)target.getModel().getValueAt(row, 3)
+                    );
+                    
+                    showModForm(concept);
                 }
             }
         });
@@ -59,7 +66,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     
     private void addActionListeners(){
         
-        
+        this.view.getBtn_Add().addActionListener(this);
     }
     
     private void fillTable(){
@@ -85,9 +92,37 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     }
 
     @Override
-    public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent input_event) {
         
+        Object eventSource = input_event.getSource();
         
+        if( eventSource == this.view.getBtn_Add() ){
+            this.showAddForm();
+        }
+    }
+    
+    private void showAddForm(){
+        
+        try {
+            this.view.dispose();
+            AddController callbackObj = new AddController(server);
+        
+        } catch (RemoteException ex) {
+            
+            ex.printStackTrace();
+        }
+    }
+    
+    private void showModForm( ConceptEntry input_concept ){
+        
+        try {
+            this.view.dispose();
+            ModController callbackObj = new ModController( input_concept, server );
+        
+        } catch (RemoteException ex) {
+            
+            ex.printStackTrace();
+        }
     }
 
     @Override

@@ -13,8 +13,8 @@ public class ErrorMessager {
     private final String ERROR_TITLE = "¡Error!";
     
     // Types of errors.
-    public static final String CLIENT_NOT_FOUND = 
-            "No se ha encontrado un cliente con el teléfono ingresado.";
+    public static final String USER_NOT_FOUND = 
+            "Usuario y/o contraseña inválidas.";
     public static final String NOT_A_NUMBER = 
             "No ha ingresado un valor válido.";
     public static final String EMPTY_FIELDS = 
