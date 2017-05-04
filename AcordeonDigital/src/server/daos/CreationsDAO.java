@@ -18,16 +18,13 @@ public class CreationsDAO extends DatabaseDAO{
     private static CreationsDAO creationsDAO;
     
     private final String INSERT_CREATION_QUERY = 
-            "INSERT INTO creation (user_id, concept_id, creation_date) VALUES (?,?,?)";
+            "INSERT INTO creation (user_id, concept_id, concept_name, category, creation_date) VALUES (?,?,?,?,?)";
     
     private final String GET_CREATOR_ID_QUERY =
             "SELECT user_id FROM creation WHERE concept_id=?";
     
     private final String GET_CREATION_ENTRYS =
-            "SELECT name, concept_name, creation_date FROM users u JOIN "
-            + "(SELECT c.creation_date, c.user_id, cc.concept_name FROM "
-            + "creation c JOIN concepts cc ON c.concept_id=cc.concept_id) "
-            + "R ON R.user_id=u.user_id";
+            "SELECT name, concept_name, creation_date FROM users u JOIN creation c ON u.user_id=c.user_id";
     
     private CreationsDAO() throws SQLException{
         
@@ -45,14 +42,16 @@ public class CreationsDAO extends DatabaseDAO{
     
 	
 
-    public void registerNewConceptCreation(int userID, int conceptID) throws SQLException{
+    public void registerNewConceptCreation(int userID, ConceptEntry conceptEntry) throws SQLException{
         
         PreparedStatement queryStatement = (PreparedStatement)
                 super.connectionToDatabase.prepareStatement( this.INSERT_CREATION_QUERY );
         
         queryStatement.setInt(1, userID);
-        queryStatement.setInt(2 , conceptID);
-        queryStatement.setTimestamp(3, new Timestamp( Calendar.getInstance().getTimeInMillis() ));
+        queryStatement.setInt(2 , conceptEntry.getId());
+        queryStatement.setString(3, conceptEntry.getConceptName());
+         queryStatement.setString(4, conceptEntry.getCategory());
+        queryStatement.setTimestamp(5, new Timestamp( Calendar.getInstance().getTimeInMillis() ));
         
         queryStatement.execute();
     }

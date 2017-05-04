@@ -6,6 +6,7 @@
 package server.daos;
 
 import common.AcordeonLogEntry;
+import common.ConceptEntry;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,13 +22,10 @@ public class EditionsDAO extends DatabaseDAO{
     private static EditionsDAO editionsDAO;
     
     private final String INSERT_EDITION_QUERY = 
-            "INSERT INTO editions (user_id, concept_id, edit_date) VALUES (?,?,?)";
+            "INSERT INTO editions (user_id, concept_id, concept_name, category, edit_date) VALUES (?,?,?,?,?)";
     
     private final String GET_EDITION_ENTRYS =
-            "SELECT name, concept_name, edit_date FROM users u JOIN "
-            + "(SELECT e.edit_date, e.user_id, cc.concept_name FROM "
-            + "editions e JOIN concepts cc ON e.concept_id=cc.concept_id) "
-            + "R ON R.user_id=u.user_id";
+            "SELECT name, concept_name, edit_date FROM users u JOIN editions e ON u.user_id=e.user_id";
     
     private EditionsDAO() throws SQLException{
         
@@ -43,14 +41,16 @@ public class EditionsDAO extends DatabaseDAO{
         return editionsDAO;
     }
     
-    public void registerConceptEdition(int userID, int conceptID) throws SQLException{
+    public void registerConceptEdition(int userID, ConceptEntry conceptEntry) throws SQLException{
         
         PreparedStatement queryStatement = (PreparedStatement)
                 super.connectionToDatabase.prepareStatement( this.INSERT_EDITION_QUERY );
         
         queryStatement.setInt(1, userID);
-        queryStatement.setInt(2 , conceptID);
-        queryStatement.setTimestamp(3, new Timestamp( Calendar.getInstance().getTimeInMillis() ));
+        queryStatement.setInt(2 , conceptEntry.getId());
+        queryStatement.setString(3, conceptEntry.getConceptName());
+        queryStatement.setString(4, conceptEntry.getCategory());
+        queryStatement.setTimestamp(5, new Timestamp( Calendar.getInstance().getTimeInMillis() ));
         
         queryStatement.execute();
     }

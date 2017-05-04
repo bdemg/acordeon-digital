@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-05-2017 a las 00:13:59
+-- Tiempo de generación: 04-05-2017 a las 03:29:20
 -- Versión del servidor: 10.1.21-MariaDB
 -- Versión de PHP: 5.6.30
 
@@ -42,6 +42,8 @@ CREATE TABLE `concepts` (
 CREATE TABLE `creation` (
   `user_id` int(11) NOT NULL,
   `concept_id` int(11) NOT NULL,
+  `concept_name` varchar(25) NOT NULL,
+  `category` varchar(25) NOT NULL,
   `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -54,6 +56,8 @@ CREATE TABLE `creation` (
 CREATE TABLE `editions` (
   `user_id` int(11) NOT NULL,
   `concept_id` int(11) NOT NULL,
+  `concept_name` varchar(25) NOT NULL,
+  `category` varchar(25) NOT NULL,
   `edit_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -103,16 +107,16 @@ ALTER TABLE `concepts`
 -- Indices de la tabla `creation`
 --
 ALTER TABLE `creation`
-  ADD PRIMARY KEY (`user_id`,`concept_id`,`creation_date`),
-  ADD KEY `concept_id` (`concept_id`),
+  ADD PRIMARY KEY (`user_id`,`concept_name`,`creation_date`),
+  ADD KEY `concept_id` (`concept_name`),
   ADD KEY `user_id` (`user_id`);
 
 --
 -- Indices de la tabla `editions`
 --
 ALTER TABLE `editions`
-  ADD PRIMARY KEY (`user_id`,`concept_id`,`edit_date`),
-  ADD KEY `concept_id` (`concept_id`),
+  ADD PRIMARY KEY (`user_id`,`concept_name`,`edit_date`),
+  ADD KEY `concept_id` (`concept_name`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -150,14 +154,12 @@ ALTER TABLE `users`
 -- Filtros para la tabla `creation`
 --
 ALTER TABLE `creation`
-  ADD CONSTRAINT `concepts2creation` FOREIGN KEY (`concept_id`) REFERENCES `concepts` (`concept_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `users2creations` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `editions`
 --
 ALTER TABLE `editions`
-  ADD CONSTRAINT `concepts2edition` FOREIGN KEY (`concept_id`) REFERENCES `concepts` (`concept_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `users2editions` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --

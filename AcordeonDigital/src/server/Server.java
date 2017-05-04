@@ -51,10 +51,18 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             ConceptsDAO conceptsDAO = ConceptsDAO.getConceptsDAO();
 
             conceptsDAO.registerNewConcept(conceptEntry);
-
+            
             //Se crea una entrada en el registro de creación de conceptos
             int newConceptID = conceptsDAO.getConceptID(conceptEntry.getConceptName());
-            CreationsDAO.getCreationsDAO().registerNewConceptCreation(userId, newConceptID);
+            
+            CreationsDAO.getCreationsDAO().registerNewConceptCreation(
+                    userId, 
+                    new ConceptEntry(
+                            newConceptID,
+                            conceptEntry.getConceptName(),
+                            conceptEntry.getCategory(),
+                            conceptEntry.getDefinition())
+            );
 
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,7 +102,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                 ConceptsDAO.getConceptsDAO().updateConceptDefinition(updatedConceptEntry);
 
                 //llamada al DAO para registrar una modificación
-                EditionsDAO.getEditionsDAO().registerConceptEdition(userId, updatedConceptEntry.getId());
+                EditionsDAO.getEditionsDAO().registerConceptEdition(userId, updatedConceptEntry);
             } catch (SQLException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
