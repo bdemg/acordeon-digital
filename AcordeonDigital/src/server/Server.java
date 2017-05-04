@@ -5,6 +5,7 @@
  */
 package server;
 
+import common.AcordeonLogEntry;
 import common.ConceptEntry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -162,5 +163,38 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         }
         
         return false;
+    }
+
+    @Override
+    public AcordeonLogEntry[] getCreationLogs() throws RemoteException {
+        
+        try {
+            return CreationsDAO.getCreationsDAO().getAllCreationLogs();
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public AcordeonLogEntry[] getEditionLogs() throws RemoteException {
+        
+        try {
+            return EditionsDAO.getEditionsDAO().getAllEditionLogs();
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public AcordeonLogEntry[] getEliminationLogs() throws RemoteException {
+        
+        try {
+            return EliminationDAO.getEliminationDAO().getAllEliminationLogs();
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }
