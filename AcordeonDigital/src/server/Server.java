@@ -26,6 +26,7 @@ import server.daos.UsersDAO;
 public class Server extends UnicastRemoteObject implements ServerInterface {
 
     private ArrayList<Integer> conceptsBeingEdited;
+    private final int SYSTEMS_USER_ID = -69;
 
     public Server() throws RemoteException {
 
@@ -133,9 +134,21 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                 
                 //llamada al DAO para eliminar el concepto
                 ConceptsDAO.getConceptsDAO().deleteConceptEntry(conceptEntry.getId());
-
                 //registrar el concepto que se eliminó
                 EliminationDAO.getEliminationDAO().registerElimination(conceptEntry, userId);
+                
+                //Si el tema fué eliminado automaticamente, se registra también
+                if(ConceptsDAO.getConceptsDAO().doesCategoryExist(conceptEntry.getCategory())){
+                    
+                    EliminationDAO.getEliminationDAO().registerElimination(
+                            new ConceptEntry (
+                                    0,
+                                    conceptEntry.getCategory(),
+                                    conceptEntry.getCategory(),
+                                    ""
+                            ),
+                            this.SYSTEMS_USER_ID);
+                }
                 
                 this.conceptsBeingEdited.remove(conceptEntry.getId());
                 return true;

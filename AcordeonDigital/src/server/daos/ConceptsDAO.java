@@ -26,6 +26,8 @@ public class ConceptsDAO extends DatabaseDAO{
             "SELECT * FROM concepts ";
     private final String GET_CONCEPT_ID_BY_NAME=
             "SELECT concept_id FROM concepts WHERE concept_name=?";
+    private final String GET_CONCEPTS_IN_CATEGORY =
+            "SELECT concept_name FROM concepts WHERE category=?";
     
     private final String UPDATE_CONCEPT_DEFINITION_QUERY =
             "UPDATE concepts SET definition=? WHERE concept_id=?";
@@ -143,5 +145,18 @@ public class ConceptsDAO extends DatabaseDAO{
         queryStatement.setInt(1, conceptID);
         
         queryStatement.execute();
+    }
+    
+    
+    public boolean doesCategoryExist(String category) throws SQLException{
+        
+        PreparedStatement queryStatement = (PreparedStatement)
+                super.connectionToDatabase.prepareStatement( this.GET_CONCEPTS_IN_CATEGORY );
+        
+        queryStatement.setString(1, category);
+        
+        ResultSet results = queryStatement.executeQuery();
+        
+        return results.last();
     }
 }
