@@ -74,15 +74,18 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
         try {
             ConceptEntry[] allConcepts = this.server.getAllConceptEntrys();
             
-            for(int i=0; i < allConcepts.length; i++){
+            if( allConcepts != null ){
                 
-                Object[] newConcept = {
-                    allConcepts[i].getId(),
-                    allConcepts[i].getConceptName(),
-                    allConcepts[i].getCategory(),
-                    allConcepts[i].getDefinition()
-                };
-                this.view.getAcordeonList().addRow( newConcept );
+                for(int i=0; i < allConcepts.length; i++){
+                
+                    Object[] newConcept = {
+                        allConcepts[i].getId(),
+                        allConcepts[i].getConceptName(),
+                        allConcepts[i].getCategory(),
+                        allConcepts[i].getDefinition()
+                    };
+                    this.view.getAcordeonList().addRow( newConcept );
+                }
             }
         
         } catch (RemoteException ex) {

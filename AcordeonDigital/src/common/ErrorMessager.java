@@ -19,6 +19,8 @@ public class ErrorMessager {
             "No ha ingresado un valor válido.";
     public static final String EMPTY_FIELDS = 
             "Asegurese de llenar todos los campos.";
+    public static final String EMPTY_FIELD = 
+            "Asegurese de llenar el campo.";
     
     private ErrorMessager(){
         ;

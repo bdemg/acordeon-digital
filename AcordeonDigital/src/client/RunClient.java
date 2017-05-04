@@ -15,7 +15,7 @@ import server.ServerInterface;
  *
  * @author Jorge A. Cano
  */
-public class Client {
+public class RunClient {
 
     public static void main(String[] args) {
 

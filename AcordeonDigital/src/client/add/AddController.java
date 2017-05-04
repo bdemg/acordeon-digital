@@ -4,6 +4,8 @@ import client.AcordeonController;
 import client.ClientInterface;
 import common.ConceptEntry;
 import common.ErrorMessager;
+import common.InformationMessager;
+import common.UserIDManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -57,10 +59,24 @@ public class AddController extends UnicastRemoteObject implements ActionListener
         
         if( !areFieldsEmpty() ){
             
-            //this.server.addNewConcept(this.createConceptEntry(), userId);
+            try {
+                int userId = UserIDManager.callManager().getUserID();
+                this.server.addNewConcept(this.createConceptEntry(), userId);
+                
+                this.resetFields();
+                
+                InformationMessager.callMessager().showMessage( 
+                        InformationMessager.ADD_SUCCESS 
+                );
+                
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
         }
         else{
-            ErrorMessager.callErrorMessager().showErrorMessage( ErrorMessager.EMPTY_FIELDS );
+            ErrorMessager.callErrorMessager().showErrorMessage( 
+                    ErrorMessager.EMPTY_FIELDS 
+            );
         }
     }
     
@@ -79,6 +95,13 @@ public class AddController extends UnicastRemoteObject implements ActionListener
         return this.view.getTxtf_Name().getText().compareTo("") == 0 ||
                 this.view.getTxtf_Category().getText().compareTo("") == 0 ||
                 this.view.getTxta_Definition().getText().compareTo("") == 0;
+    }
+    
+    private void resetFields(){
+        
+        this.view.getTxtf_Name().setText("");
+        this.view.getTxtf_Category().setText("");
+        this.view.getTxta_Definition().setText("");
     }
     
     private void returnToAcordeon(){

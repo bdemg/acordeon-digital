@@ -8,10 +8,15 @@ package client.mod;
 import client.AcordeonController;
 import client.ClientInterface;
 import common.ConceptEntry;
+import common.ErrorMessager;
+import common.InformationMessager;
+import common.UserIDManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import server.ServerInterface;
 
 /**
@@ -33,6 +38,9 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         this.view.setVisible(true);
         
         this.modConcept = modConcept;
+        this.view.getLbl_realName().setText( this.modConcept.getConceptName() );
+        this.view.getLbl_realCategory().setText( this.modConcept.getCategory() );
+        this.view.getTxta_Definition().setText( this.modConcept.getDefinition() );
         
         this.server = server;
         this.addActionListeners();
@@ -51,7 +59,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         
         if( eventSource == this.view.getBtn_ModConcept() ){
             
-            this.modifyConcept();
+            this.modifyConceptDefinition();
         }
         else if ( eventSource == this.view.getBtn_Exit() ) {
             
@@ -59,9 +67,35 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         }
     }
     
-    private void modifyConcept(){
+    private void modifyConceptDefinition(){
         
+        if( !isDefinitionFieldEmpty() ){
+            
+            try {
+                String newDefinition = this.view.getTxta_Definition().getText();
+                this.modConcept.setDefinition( newDefinition );
+                int userId = UserIDManager.callManager().getUserID();
+                
+                this.server.updateConceptDefinition( this.modConcept , userId );
+                
+                InformationMessager.callMessager().showMessage( 
+                        InformationMessager.MOD_SUCCESS 
+                );
+
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
+        else{
+            ErrorMessager.callErrorMessager().showErrorMessage( 
+                    ErrorMessager.EMPTY_FIELD 
+            );
+        }
+    }
+    
+    private boolean isDefinitionFieldEmpty(){
         
+        return this.view.getTxta_Definition().getText().compareTo("") == 0;
     }
     
     private void returnToAcordeon(){

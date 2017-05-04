@@ -10,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import server.ServerInterface;
 import common.DAOErrorCodes;
+import common.UserIDManager;
 import server.daos.UsersDAO;
 
 /**
@@ -64,6 +65,7 @@ public class LoginController extends UnicastRemoteObject implements ActionListen
             }
             else{
                 
+                UserIDManager.callManager().setUserID( responseValue );
                 this.view.dispose();
                 AcordeonController callbackObj = new AcordeonController(server);
             }
