@@ -66,30 +66,10 @@ public class EditionsDAO extends DatabaseDAO{
          
          if(hasResults){
              
-             return resultsToLogEntryArray(resultSet);
+             return DAOUtilities.resultsToLogEntryArray(resultSet);
          } else {
              
             return null;
         }
-    }
-
-    private AcordeonLogEntry[] resultsToLogEntryArray(ResultSet results) throws SQLException {
-        
-        results.last();
-        int totalLogCount = results.getRow();
-        AcordeonLogEntry[] logEntrys = new AcordeonLogEntry[totalLogCount];
-        results.first();
-        
-        for(int logCount = 0; logCount<totalLogCount; logCount++){
-            
-            logEntrys[logCount] = new AcordeonLogEntry(
-                    results.getString("name"),
-                    results.getString("concept_name"),
-                    results.getTimestamp("edit_date")
-            );
-            results.next();
-        }
-        
-        return logEntrys;
     }
 }
