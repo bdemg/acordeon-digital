@@ -5,6 +5,7 @@
  */
 package server;
 
+import common.AcordeonLogEntry;
 import common.ConceptEntry;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -26,4 +27,10 @@ public interface ServerInterface extends Remote {
     public boolean updateConceptDefinition(ConceptEntry updatedConceptEntry, int userId) throws RemoteException;
     
     public boolean deleteConceptEntry(ConceptEntry conceptEntry, int userId) throws RemoteException;
+    
+    public AcordeonLogEntry[] getCreationLogs() throws RemoteException;
+    
+    public AcordeonLogEntry[] getEditionLogs() throws RemoteException;
+    
+    public AcordeonLogEntry[] getEliminationLogs() throws RemoteException;
 }
