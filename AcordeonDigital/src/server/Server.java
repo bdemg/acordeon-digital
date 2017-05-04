@@ -91,12 +91,13 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
     @Override
     public boolean updateConceptDefinition(ConceptEntry updatedConceptEntry, int userId) throws RemoteException {
 
-        boolean isConceptBeingEdited = this.conceptsBeingEdited.contains(updatedConceptEntry.getId());
+        Integer conceptId = new Integer(updatedConceptEntry.getId());
+        boolean isConceptBeingEdited = this.conceptsBeingEdited.contains(conceptId);
 
         //si el concepto no se está editando, se pone bajo edición y se guarda
         if (!isConceptBeingEdited) {
 
-            this.conceptsBeingEdited.add(updatedConceptEntry.getId());
+            this.conceptsBeingEdited.add(conceptId);
 
             try {
 
@@ -109,7 +110,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            this.conceptsBeingEdited.remove(updatedConceptEntry.getId());
+            this.conceptsBeingEdited.remove(conceptId);
 
             return true;
         } else {
@@ -121,7 +122,8 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
     @Override
     public boolean deleteConceptEntry(ConceptEntry conceptEntry, int userId) throws RemoteException {
 
-        boolean isConceptBeingEdited = this.conceptsBeingEdited.contains(conceptEntry.getId());
+        Integer conceptId = new Integer(conceptEntry.getId());
+        boolean isConceptBeingEdited = this.conceptsBeingEdited.contains(conceptId);
 
         try {
 
@@ -131,7 +133,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             //si el concepto no se está editando, se pone bajo edición y se elimina
             if (!isConceptBeingEdited && isConceptCreator) {
 
-                this.conceptsBeingEdited.add(conceptEntry.getId());
+                this.conceptsBeingEdited.add(conceptId);
                 
                 //llamada al DAO para eliminar el concepto
                 ConceptsDAO.getConceptsDAO().deleteConceptEntry(conceptEntry.getId());
@@ -151,7 +153,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                             this.SYSTEMS_USER_ID);
                 }
                 
-                this.conceptsBeingEdited.remove(conceptEntry.getId());
+                this.conceptsBeingEdited.remove(conceptId);
                 return true;
             } else {
 
