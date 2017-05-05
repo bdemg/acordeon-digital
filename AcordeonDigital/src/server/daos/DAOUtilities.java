@@ -28,7 +28,8 @@ public class DAOUtilities {
             logEntrys[logCount] = new AcordeonLogEntry(
                     results.getString(1),
                     results.getString(2),
-                    results.getTimestamp(3)
+                    results.getString(3),
+                    results.getTimestamp(4)
             );
             results.next();
         }

@@ -15,11 +15,13 @@ public class AcordeonLogEntry implements Comparable<AcordeonLogEntry> {
     
     private String userName;
     private String conceptName;
+    private String category;
     private Timestamp date;
 
-    public AcordeonLogEntry(String userName, String conceptName, Timestamp date) {
+    public AcordeonLogEntry(String userName, String conceptName, String category, Timestamp date) {
         this.userName = userName;
         this.conceptName = conceptName;
+        this.category = category;
         this.date = date;
     }
 
@@ -47,5 +49,12 @@ public class AcordeonLogEntry implements Comparable<AcordeonLogEntry> {
     @Override
     public int compareTo(AcordeonLogEntry o) {
         return this.date.compareTo(o.getDate());
+    }
+
+    /**
+     * @return the category
+     */
+    public String getCategory() {
+        return category;
     }
 }

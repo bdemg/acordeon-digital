@@ -25,7 +25,7 @@ public class EliminationDAO extends DatabaseDAO{
             "INSERT INTO eliminations (user_id, concept_name, category, elimination_date ) VALUES (?,?,?,?)";
     
     private final String GET_ELIMINATION_ENTRYS =
-            "SELECT name, concept_name, elimination_date FROM users u JOIN eliminations e ON u.user_id=e.user_id";
+            "SELECT name, concept_name, category, elimination_date FROM users u JOIN eliminations e ON u.user_id=e.user_id";
     
     private EliminationDAO() throws SQLException{
         

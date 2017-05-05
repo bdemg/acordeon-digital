@@ -25,7 +25,7 @@ public class EditionsDAO extends DatabaseDAO{
             "INSERT INTO editions (user_id, concept_id, concept_name, category, edit_date) VALUES (?,?,?,?,?)";
     
     private final String GET_EDITION_ENTRYS =
-            "SELECT name, concept_name, edit_date FROM users u JOIN editions e ON u.user_id=e.user_id";
+            "SELECT name, concept_name, category, edit_date FROM users u JOIN editions e ON u.user_id=e.user_id";
     
     private EditionsDAO() throws SQLException{
         

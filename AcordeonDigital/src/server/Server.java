@@ -146,7 +146,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                     EliminationDAO.getEliminationDAO().registerElimination(
                             new ConceptEntry (
                                     0,
-                                    conceptEntry.getCategory(),
+                                    "",
                                     conceptEntry.getCategory(),
                                     ""
                             ),
