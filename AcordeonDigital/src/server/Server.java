@@ -28,10 +28,13 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
 
     private ArrayList<Integer> conceptsBeingEdited;
     private final int SYSTEMS_USER_ID = -69;
+    
+    private final ArrayList clientList;
 
     public Server() throws RemoteException {
 
         conceptsBeingEdited = new ArrayList<>();
+        clientList = new ArrayList();
     }
 
     @Override
@@ -65,7 +68,8 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                             conceptEntry.getCategory(),
                             conceptEntry.getDefinition())
             );
-
+            
+            //this.doCallbacks();
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,7 +115,8 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             }
 
             this.conceptsBeingEdited.remove(conceptId);
-
+            
+            //this.doCallbacks();
             return true;
         } else {
 
@@ -154,6 +159,8 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                 }
                 
                 this.conceptsBeingEdited.remove(conceptId);
+                
+                //this.doCallbacks();
                 return true;
             } else {
 
@@ -199,4 +206,46 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         }
         return null;
     }
+    
+    /*
+    @Override
+    public void registerForAcordeonChangeCallback(ClientCallbackInterface callbackObject) throws RemoteException{
+        
+        if (!(clientList.contains(callbackObject))) {
+            clientList.add(callbackObject);
+            System.out.println("Registered new client ");
+        }
+    }
+    
+    @Override
+    public void unregisterForAcordeonChangeCallback(ClientCallbackInterface callbackObject) throws RemoteException{
+        
+        if (clientList.remove(callbackObject)) {
+            System.out.println("Unregistered client ");
+        } else {
+            System.out.println(
+                    "unregister: client wasn't registered.");
+        }
+    }
+    
+    private void doCallbacks() throws RemoteException {
+
+        // make callback to each registered client
+        System.out.println(
+                "**************************************\n"
+                + "Callbacks initiated ---");
+        
+        ConceptEntry[] conceptEntrys = ConceptsDAO.getConceptsDAO().getAllConcepts();
+        for (int i = 0; i < clientList.size(); i++) {
+            System.out.println("doing " + i + "-th callback\n");
+            // convert the vector object to a callback object
+            ClientCallbackInterface nextClient
+                    = (ClientCallbackInterface) clientList.get(i);
+            // invoke the callback method
+            nextClient.notifyNewAcordeon(conceptEntrys);
+        }// end for
+        System.out.println("********************************\n"
+                + "Server completed callbacks ---");
+    } // doCallbacks
+    */
 }

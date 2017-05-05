@@ -33,4 +33,8 @@ public interface ServerInterface extends Remote {
     public AcordeonLogEntry[] getEditionLogs() throws RemoteException;
     
     public AcordeonLogEntry[] getEliminationLogs() throws RemoteException;
+    
+    //public void registerForAcordeonChangeCallback(ClientCallbackInterface callbackObject) throws RemoteException;
+    
+    //public void unregisterForAcordeonChangeCallback(ClientCallbackInterface callbackObject) throws RemoteException;
 }
