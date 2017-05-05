@@ -8,6 +8,7 @@ package client.mod;
 import client.AcordeonController;
 import client.ClientInterface;
 import common.ConceptEntry;
+import common.ConfirmationMessager;
 import common.ErrorMessager;
 import common.InformationMessager;
 import common.UserIDManager;
@@ -29,6 +30,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
     private final ServerInterface server;
     
     private ConceptEntry modConcept;
+    private int userId;
     
     public ModController( ConceptEntry modConcept, ServerInterface server ) throws RemoteException{
         
@@ -42,6 +44,8 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         this.view.getLbl_realCategory().setText( this.modConcept.getCategory() );
         this.view.getTxta_Definition().setText( this.modConcept.getDefinition() );
         
+        this.userId = UserIDManager.callManager().getUserID();
+        
         this.server = server;
         this.addActionListeners();
     }
@@ -49,6 +53,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
     private void addActionListeners(){
         
         this.view.getBtn_ModConcept().addActionListener(this);
+        this.view.getBtn_Delete().addActionListener(this);
         this.view.getBtn_Exit().addActionListener(this);
     }
 
@@ -60,6 +65,10 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         if( eventSource == this.view.getBtn_ModConcept() ){
             
             this.modifyConceptDefinition();
+        }
+        else if( eventSource == this.view.getBtn_Delete() ){
+            
+            this.deleteConcept();
         }
         else if ( eventSource == this.view.getBtn_Exit() ) {
             
@@ -74,9 +83,8 @@ public class ModController extends UnicastRemoteObject implements ActionListener
             try {
                 String newDefinition = this.view.getTxta_Definition().getText();
                 this.modConcept.setDefinition( newDefinition );
-                int userId = UserIDManager.callManager().getUserID();
                 
-                this.server.updateConceptDefinition( this.modConcept , userId );
+                this.server.updateConceptDefinition( this.modConcept , this.userId );
                 
                 InformationMessager.callMessager().showMessage( 
                         InformationMessager.MOD_SUCCESS 
@@ -96,6 +104,24 @@ public class ModController extends UnicastRemoteObject implements ActionListener
     private boolean isDefinitionFieldEmpty(){
         
         return this.view.getTxta_Definition().getText().compareTo("") == 0;
+    }
+    
+    private void deleteConcept(){
+        
+        boolean isDeleteConfirmed = 
+                ConfirmationMessager.callMessager().askForConfirmation( 
+                        ConfirmationMessager.CONFIRM_CONCEPT_DELETE 
+                );
+        if( isDeleteConfirmed ){
+            
+            try {
+                this.server.deleteConceptEntry( this.modConcept, this.userId );
+                this.returnToAcordeon();
+
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     
     private void returnToAcordeon(){

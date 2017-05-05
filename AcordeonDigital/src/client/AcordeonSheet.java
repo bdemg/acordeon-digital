@@ -36,13 +36,17 @@ public class AcordeonSheet extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         table_Concepts = new javax.swing.JTable();
         btn_Add = new javax.swing.JButton();
+        btn_Log = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Acordeón");
 
         table_Concepts.setModel(new client.AcordeonList(0));
         jScrollPane1.setViewportView(table_Concepts);
 
-        btn_Add.setText("Añadir Concepto");
+        btn_Add.setText("Añadir concepto");
+
+        btn_Log.setText("Ver bitácora");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -54,6 +58,8 @@ public class AcordeonSheet extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btn_Add)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Log)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -61,10 +67,12 @@ public class AcordeonSheet extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btn_Add)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_Add)
+                    .addComponent(btn_Log))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -107,6 +115,7 @@ public class AcordeonSheet extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Add;
+    private javax.swing.JButton btn_Log;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table_Concepts;
     // End of variables declaration//GEN-END:variables
@@ -132,5 +141,9 @@ public class AcordeonSheet extends javax.swing.JFrame {
 
     public JButton getBtn_Add() {
         return btn_Add;
+    }
+
+    public JButton getBtn_Log() {
+        return btn_Log;
     }
 }

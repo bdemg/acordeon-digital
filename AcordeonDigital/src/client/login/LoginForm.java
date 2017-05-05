@@ -38,6 +38,7 @@ public class LoginForm extends javax.swing.JFrame {
         pswdf_password = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Acordeón");
 
         lbl_user.setText("Usuario:");
 

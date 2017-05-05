@@ -41,8 +41,10 @@ public class ModForm extends javax.swing.JFrame {
         lbl_realName = new javax.swing.JLabel();
         lbl_realCategory = new javax.swing.JLabel();
         btn_Exit = new javax.swing.JButton();
+        btn_Delete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Modificar concepto");
 
         lbl_Name.setText("Nombre:");
 
@@ -62,6 +64,8 @@ public class ModForm extends javax.swing.JFrame {
 
         btn_Exit.setText("Cancelar");
 
+        btn_Delete.setText("Eliminar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,8 +83,11 @@ public class ModForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_Exit))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(lbl_realName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_Delete))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbl_realName)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbl_realCategory))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -92,7 +99,8 @@ public class ModForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_Name)
-                    .addComponent(lbl_realName))
+                    .addComponent(lbl_realName)
+                    .addComponent(btn_Delete))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_Category)
@@ -147,6 +155,7 @@ public class ModForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_Delete;
     private javax.swing.JButton btn_Exit;
     private javax.swing.JButton btn_ModConcept;
     private javax.swing.JScrollPane jScrollPane1;
@@ -160,6 +169,10 @@ public class ModForm extends javax.swing.JFrame {
 
     public JButton getBtn_ModConcept() {
         return btn_ModConcept;
+    }
+
+    public JButton getBtn_Delete() {
+        return btn_Delete;
     }
 
     public JButton getBtn_Exit() {

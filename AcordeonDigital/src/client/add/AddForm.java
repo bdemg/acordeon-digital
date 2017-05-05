@@ -42,6 +42,7 @@ public class AddForm extends javax.swing.JFrame {
         btn_Exit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Añadir concepto");
 
         lbl_Name.setText("Nombre:");
 
