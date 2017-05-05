@@ -1,6 +1,7 @@
 package client;
 
 import client.add.AddController;
+import client.log.LogController;
 import client.mod.ModController;
 import common.ConceptEntry;
 import java.awt.event.ActionEvent;
@@ -67,6 +68,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     private void addActionListeners(){
         
         this.view.getBtn_Add().addActionListener(this);
+        this.view.getBtn_Log().addActionListener(this);
     }
     
     private void fillTable(){
@@ -100,7 +102,12 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
         Object eventSource = input_event.getSource();
         
         if( eventSource == this.view.getBtn_Add() ){
+            
             this.showAddForm();
+        }
+        else if( eventSource == this.view.getBtn_Log() ){
+            
+            this.showLogSheet();
         }
     }
     
@@ -121,6 +128,18 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
         try {
             this.view.dispose();
             ModController callbackObj = new ModController( input_concept, server );
+        
+        } catch (RemoteException ex) {
+            
+            ex.printStackTrace();
+        }
+    }
+    
+    private void showLogSheet(){
+        
+        try {
+            this.view.dispose();
+            LogController callbackObj = new LogController( server );
         
         } catch (RemoteException ex) {
             
