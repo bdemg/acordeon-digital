@@ -14,12 +14,12 @@ import javax.swing.JTable;
  *
  * @author José
  */
-public class LogSheet extends javax.swing.JFrame {
+public class LogShit extends javax.swing.JFrame {
 
     /**
      * Creates new form LogForm
      */
-    public LogSheet() {
+    public LogShit() {
         initComponents();
     }
 
@@ -40,7 +40,7 @@ public class LogSheet extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bitácora");
 
-        table_Log.setModel(new client.model.LogList(0) );
+        table_Log.setModel( new client.model.LogList(0) );
         jScrollPane1.setViewportView(table_Log);
 
         btn_Return.setText("Regresar");
@@ -93,14 +93,18 @@ public class LogSheet extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LogSheet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LogShit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LogSheet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LogShit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LogSheet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LogShit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LogSheet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LogShit.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -109,7 +113,7 @@ public class LogSheet extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LogSheet().setVisible(true);
+                new LogShit().setVisible(true);
             }
         });
     }
