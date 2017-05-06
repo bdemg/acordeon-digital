@@ -46,7 +46,7 @@ public class LogController extends UnicastRemoteObject implements ActionListener
     private void fillTable(){
         
         try {
-            AcordeonLogEntry[] allEntrys = this.server.getCreationLogs();
+            AcordeonLogEntry[] allEntrys = this.server.getEliminationLogs();
             
             if( allEntrys != null ){
                 

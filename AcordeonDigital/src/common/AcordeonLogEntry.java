@@ -5,13 +5,14 @@
  */
 package common;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  *
  * @author Jorge A. Cano
  */
-public class AcordeonLogEntry implements Comparable<AcordeonLogEntry> {
+public class AcordeonLogEntry implements Serializable, Comparable<AcordeonLogEntry> {
     
     private String userName;
     private String conceptName;
