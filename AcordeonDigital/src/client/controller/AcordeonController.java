@@ -29,7 +29,8 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
         this.view = new AcordeonSheet();
         
         this.server = server;
-        //this.server.registerForCallback(this);
+        this.server.registerForAcordeonChangeCallback(this);
+        
         this.addActionListeners();
         this.setTableProperties();
         this.fillTable();
@@ -114,6 +115,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     private void showAddForm(){
         
         try {
+            this.server.unregisterForAcordeonChangeCallback(this);
             this.view.dispose();
             AddController callbackObj = new AddController(server);
         
@@ -126,6 +128,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     private void showModForm( ConceptEntry input_concept ){
         
         try {
+            this.server.unregisterForAcordeonChangeCallback(this);
             this.view.dispose();
             ModController callbackObj = new ModController( input_concept, server );
         
@@ -138,6 +141,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     private void showLogSheet(){
         
         try {
+            this.server.unregisterForAcordeonChangeCallback(this);
             this.view.dispose();
             LogController callbackObj = new LogController( server );
         

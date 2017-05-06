@@ -3,7 +3,7 @@ package client.controller;
 import client.controller.AcordeonController;
 import client.model.ClientInterface;
 import client.model.LogList;
-import client.view.LogShit;
+import client.view.LogSheet;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
 import java.awt.event.ActionEvent;
@@ -19,12 +19,12 @@ import server.ServerInterface;
  */
 public class LogController extends UnicastRemoteObject implements ActionListener, ClientInterface{
     
-    private final LogShit view;
+    private final LogSheet view;
     private final ServerInterface server;
     
     public LogController( ServerInterface server ) throws RemoteException{
         
-        this.view = new LogShit();
+        this.view = new LogSheet();
         
         this.server = server;
         this.setTableProperties();
