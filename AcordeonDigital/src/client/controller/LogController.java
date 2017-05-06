@@ -2,6 +2,7 @@ package client.controller;
 
 import client.controller.AcordeonController;
 import client.model.ClientInterface;
+import client.model.LogList;
 import client.view.LogShit;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
@@ -31,9 +32,14 @@ public class LogController extends UnicastRemoteObject implements ActionListener
         this.fillTable();
         this.view.getComboBox_Logs().addActionListener (new ActionListener () {
             public void actionPerformed(ActionEvent e) {
+                resetTable();
                 fillTable();
             }
         });
+    }
+    
+    private void resetTable(){
+        this.view.setLogList(new LogList(0));
     }
     
     private void setTableProperties(){
