@@ -15,12 +15,12 @@ public class ErrorMessager {
     // Types of errors.
     public static final String USER_NOT_FOUND = 
             "Usuario y/o contraseña inválidas.";
-    public static final String NOT_A_NUMBER = 
-            "No ha ingresado un valor válido.";
     public static final String EMPTY_FIELDS = 
             "Asegurese de llenar todos los campos.";
     public static final String EMPTY_FIELD = 
             "Asegurese de llenar el campo.";
+    public static final String CANNOT_DELETE =
+            "Usted no es el creador del concepto o alguien lo está editando en este momento. Intente más tarde.";
     
     private ErrorMessager(){
         ;

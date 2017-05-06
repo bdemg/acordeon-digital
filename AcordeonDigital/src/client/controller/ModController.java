@@ -69,7 +69,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         }
         else if( eventSource == this.view.getBtn_Delete() ){
             
-            this.deleteConcept();
+            this.confirmDeletionOfConcept();
         }
         else if ( eventSource == this.view.getBtn_Exit() ) {
             
@@ -107,7 +107,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         return this.view.getTxta_Definition().getText().compareTo("") == 0;
     }
     
-    private void deleteConcept(){
+    private void confirmDeletionOfConcept(){
         
         boolean isDeleteConfirmed = 
                 ConfirmationMessager.callMessager().askForConfirmation( 
@@ -115,13 +115,27 @@ public class ModController extends UnicastRemoteObject implements ActionListener
                 );
         if( isDeleteConfirmed ){
             
-            try {
-                this.server.deleteConceptEntry( this.modConcept, this.userId );
+            this.deleteConcept();
+        }
+    }
+    
+    private void deleteConcept(){
+        
+        try {
+            boolean isOkToDelete = this.server.deleteConceptEntry( 
+                    this.modConcept, this.userId 
+            );
+            if( isOkToDelete ){
                 this.returnToAcordeon();
-
-            } catch (RemoteException ex) {
-                ex.printStackTrace();
             }
+            else{
+                ErrorMessager.callErrorMessager().showErrorMessage( 
+                    ErrorMessager.CANNOT_DELETE 
+                );
+            }
+                
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
         }
     }
     
