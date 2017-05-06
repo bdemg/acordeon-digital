@@ -5,6 +5,7 @@
  */
 package server;
 
+import client.model.ClientInterface;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
 import java.rmi.RemoteException;
@@ -69,7 +70,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                             conceptEntry.getDefinition())
             );
             
-            //this.doCallbacks();
+            this.doCallbacks();
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -116,7 +117,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
 
             this.conceptsBeingEdited.remove(conceptId);
             
-            //this.doCallbacks();
+            this.doCallbacks();
             return true;
         } else {
 
@@ -160,7 +161,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                 
                 this.conceptsBeingEdited.remove(conceptId);
                 
-                //this.doCallbacks();
+                this.doCallbacks();
                 return true;
             } else {
 
@@ -207,9 +208,9 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         return null;
     }
     
-    /*
+    
     @Override
-    public void registerForAcordeonChangeCallback(ClientCallbackInterface callbackObject) throws RemoteException{
+    public void registerForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException{
         
         if (!(clientList.contains(callbackObject))) {
             clientList.add(callbackObject);
@@ -218,7 +219,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
     }
     
     @Override
-    public void unregisterForAcordeonChangeCallback(ClientCallbackInterface callbackObject) throws RemoteException{
+    public void unregisterForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException{
         
         if (clientList.remove(callbackObject)) {
             System.out.println("Unregistered client ");
@@ -230,22 +231,27 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
     
     private void doCallbacks() throws RemoteException {
 
-        // make callback to each registered client
-        System.out.println(
-                "**************************************\n"
-                + "Callbacks initiated ---");
-        
-        ConceptEntry[] conceptEntrys = ConceptsDAO.getConceptsDAO().getAllConcepts();
-        for (int i = 0; i < clientList.size(); i++) {
-            System.out.println("doing " + i + "-th callback\n");
-            // convert the vector object to a callback object
-            ClientCallbackInterface nextClient
-                    = (ClientCallbackInterface) clientList.get(i);
-            // invoke the callback method
-            nextClient.notifyNewAcordeon(conceptEntrys);
-        }// end for
-        System.out.println("********************************\n"
-                + "Server completed callbacks ---");
-    } // doCallbacks
-    */
+        try {
+            // make callback to each registered client
+            System.out.println(
+                    "**************************************\n"
+                            + "Callbacks initiated ---");
+            
+            ConceptEntry[] conceptEntrys = ConceptsDAO.getConceptsDAO().getAllConcepts();
+            for (int i = 0; i < clientList.size(); i++) {
+                System.out.println("doing " + i + "-th callback\n");
+                // convert the vector object to a callback object
+                ClientInterface nextClient
+                        = (ClientInterface) clientList.get(i);
+                // invoke the callback method
+                nextClient.notifyAcordeonChanges(conceptEntrys);
+            }// end for
+            System.out.println("********************************\n"
+                    + "Server completed callbacks ---");
+        } // doCallbacks
+        catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

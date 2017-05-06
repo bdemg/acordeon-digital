@@ -147,7 +147,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     }
 
     @Override
-    public void notifyEdits() throws RemoteException {
+    public void notifyAcordeonChanges(ConceptEntry[] updatedConceptEntrys) throws RemoteException {
         
     }
     

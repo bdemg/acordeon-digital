@@ -138,7 +138,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
     }
 
     @Override
-    public void notifyEdits() throws RemoteException {
+    public void notifyAcordeonChanges(ConceptEntry[] updatedConceptEntrys) throws RemoteException {
         
     }
     

@@ -4,6 +4,7 @@ import client.controller.AcordeonController;
 import client.model.ClientInterface;
 import client.view.LogSheet;
 import common.AcordeonLogEntry;
+import common.ConceptEntry;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -93,7 +94,7 @@ public class LogController extends UnicastRemoteObject implements ActionListener
     }
 
     @Override
-    public void notifyEdits() throws RemoteException {
+    public void notifyAcordeonChanges(ConceptEntry[] updatedConceptEntrys) throws RemoteException {
         
     }
     

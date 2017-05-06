@@ -3,6 +3,7 @@ package client.controller;
 import client.controller.AcordeonController;
 import client.model.ClientInterface;
 import client.view.LoginForm;
+import common.ConceptEntry;
 import common.ErrorMessager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -78,7 +79,7 @@ public class LoginController extends UnicastRemoteObject implements ActionListen
     }
 
     @Override
-    public void notifyEdits() throws RemoteException {
+    public void notifyAcordeonChanges(ConceptEntry[] updatedConceptEntrys) throws RemoteException {
         
     }
     

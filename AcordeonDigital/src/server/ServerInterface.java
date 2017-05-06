@@ -5,6 +5,7 @@
  */
 package server;
 
+import client.model.ClientInterface;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
 import java.rmi.Remote;
@@ -34,7 +35,7 @@ public interface ServerInterface extends Remote {
     
     public AcordeonLogEntry[] getEliminationLogs() throws RemoteException;
     
-    //public void registerForAcordeonChangeCallback(ClientCallbackInterface callbackObject) throws RemoteException;
+    public void registerForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException;
     
-    //public void unregisterForAcordeonChangeCallback(ClientCallbackInterface callbackObject) throws RemoteException;
+    public void unregisterForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException;
 }
