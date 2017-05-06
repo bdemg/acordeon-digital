@@ -1,7 +1,8 @@
-package client.login;
+package client.controller;
 
-import client.AcordeonController;
-import client.ClientInterface;
+import client.controller.AcordeonController;
+import client.model.ClientInterface;
+import client.view.LoginForm;
 import common.ErrorMessager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

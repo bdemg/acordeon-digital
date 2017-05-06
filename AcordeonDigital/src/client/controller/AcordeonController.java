@@ -1,8 +1,7 @@
-package client;
+package client.controller;
 
-import client.add.AddController;
-import client.log.LogController;
-import client.mod.ModController;
+import client.view.AcordeonSheet;
+import client.model.ClientInterface;
 import common.ConceptEntry;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

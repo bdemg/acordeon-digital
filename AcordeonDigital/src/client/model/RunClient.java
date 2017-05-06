@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client;
+package client.model;
 
-import client.login.LoginController;
+import client.controller.LoginController;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.rmi.Naming;

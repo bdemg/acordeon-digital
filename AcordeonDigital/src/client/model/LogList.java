@@ -1,30 +1,35 @@
-package client;
+package client.model;
 
+import java.sql.Timestamp;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Antonio Soto
  */
-public class AcordeonList extends DefaultTableModel{
+public class LogList extends DefaultTableModel{
     
-    public static final int CONCEPT_ID = 0;
+    public static final int USER_NAME = 0;
     public static final int CONCEPT_NAME = 1;
     public static final int CONCEPT_CATEGORY = 2;
-    public static final int CONCEPT_DEFINITION = 3;
+    public static final int DATE = 3;
     
     //the fields of the orders list
-    private static final String[] FIELD_NAMES = { "ID", "Concepto",
-        "Categoría", "Definición" };
+    private static final String[] FIELD_NAMES = { 
+        "Usuario",
+        "Concepto",
+        "Categoría",
+        "Fecha" 
+    };
     
-    public AcordeonList( int input_rowCount ){
+    public LogList( int input_rowCount ){
         
-        super( AcordeonList.FIELD_NAMES, input_rowCount );
+        super( LogList.FIELD_NAMES, input_rowCount );
     }
     
-    public AcordeonList( Object[][] input_data ){
+    public LogList( Object[][] input_data ){
         
-        super( input_data, AcordeonList.FIELD_NAMES );
+        super( input_data, LogList.FIELD_NAMES );
     }
     
     //the diferent types of values that are can be written to the orders list
@@ -34,20 +39,20 @@ public class AcordeonList extends DefaultTableModel{
         Class columnClass = String.class;
         switch ( input_columnIndex ) {
             
-            case AcordeonList.CONCEPT_ID:
-                columnClass = Integer.class;
-                break;
-                
-            case AcordeonList.CONCEPT_NAME:
+            case LogList.USER_NAME:
                 columnClass = String.class;
                 break;
                 
-            case AcordeonList.CONCEPT_CATEGORY:
+            case LogList.CONCEPT_NAME:
                 columnClass = String.class;
                 break;
                 
-            case AcordeonList.CONCEPT_DEFINITION:
+            case LogList.CONCEPT_CATEGORY:
                 columnClass = String.class;
+                break;
+                
+            case LogList.DATE:
+                columnClass = Timestamp.class;
                 break;
                 
             default:

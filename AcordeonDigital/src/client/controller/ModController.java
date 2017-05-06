@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client.mod;
+package client.controller;
 
-import client.AcordeonController;
-import client.ClientInterface;
+import client.controller.AcordeonController;
+import client.model.ClientInterface;
+import client.view.ModForm;
 import common.ConceptEntry;
 import common.ConfirmationMessager;
 import common.ErrorMessager;

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client.log;
+package client.view;
 
+import client.model.LogList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -37,8 +38,9 @@ public class LogSheet extends javax.swing.JFrame {
         ComboBox_Logs = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Bitácora");
 
-        table_Log.setModel( new client.log.LogList(0) );
+        table_Log.setModel(new client.model.LogList(0) );
         jScrollPane1.setViewportView(table_Log);
 
         btn_Return.setText("Regresar");

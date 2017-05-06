@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client;
+package client.view;
 
+import client.model.AcordeonList;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
@@ -41,7 +42,7 @@ public class AcordeonSheet extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Acordeón");
 
-        table_Concepts.setModel(new client.AcordeonList(0));
+        table_Concepts.setModel(new client.model.AcordeonList(0));
         jScrollPane1.setViewportView(table_Concepts);
 
         btn_Add.setText("Añadir concepto");

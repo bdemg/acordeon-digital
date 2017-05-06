@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client.mod;
+package client.view;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;

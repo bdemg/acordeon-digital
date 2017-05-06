@@ -1,7 +1,8 @@
-package client.add;
+package client.controller;
 
-import client.AcordeonController;
-import client.ClientInterface;
+import client.view.AddForm;
+import client.controller.AcordeonController;
+import client.model.ClientInterface;
 import common.ConceptEntry;
 import common.ErrorMessager;
 import common.InformationMessager;

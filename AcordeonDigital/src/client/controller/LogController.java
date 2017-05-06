@@ -1,7 +1,8 @@
-package client.log;
+package client.controller;
 
-import client.AcordeonController;
-import client.ClientInterface;
+import client.controller.AcordeonController;
+import client.model.ClientInterface;
+import client.view.LogSheet;
 import common.AcordeonLogEntry;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,21 +74,9 @@ public class LogController extends UnicastRemoteObject implements ActionListener
         
         Object eventSource = input_event.getSource();
         
-        JComboBox comboBox = (JComboBox)input_event.getSource();
-        String comboValue = (String)comboBox.getSelectedItem();
-        
         if( eventSource == this.view.getBtn_Return() ){
             
             this.returnToAcordeon();
-        }
-        else if( comboValue.equals("Creaciones") ){
-            
-        }
-        else if( comboValue.equals("Ediciones") ){
-            
-        }
-        else if( comboValue.equals("Eliminaciones") ){
-            
         }
     }
     
@@ -95,7 +84,7 @@ public class LogController extends UnicastRemoteObject implements ActionListener
         
         try {
             this.view.dispose();
-            AcordeonController callbackObj = new AcordeonController(server);
+            AcordeonController callbackObj = new AcordeonController( this.server );
         
         } catch (RemoteException ex) {
             
