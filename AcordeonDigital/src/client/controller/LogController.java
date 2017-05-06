@@ -2,6 +2,7 @@ package client.controller;
 
 import client.controller.AcordeonController;
 import client.model.ClientInterface;
+import client.model.LogList;
 import client.view.LogSheet;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
@@ -29,6 +30,16 @@ public class LogController extends UnicastRemoteObject implements ActionListener
         this.setTableProperties();
         this.addActionListeners();
         this.fillTable();
+        this.view.getComboBox_Logs().addActionListener (new ActionListener () {
+            public void actionPerformed(ActionEvent e) {
+                resetTable();
+                fillTable();
+            }
+        });
+    }
+    
+    private void resetTable(){
+        this.view.setLogList(new LogList(0));
     }
     
     private void setTableProperties(){
@@ -45,20 +56,38 @@ public class LogController extends UnicastRemoteObject implements ActionListener
         this.view.getComboBox_Logs().addActionListener(this);
     }
     
+    private String getSelectedOption(){
+        return (String)this.view.getComboBox_Logs().getSelectedItem();
+    }
+    
     private void fillTable(){
-        
+        AcordeonLogEntry[] allEntries;
+        String selectedOption = getSelectedOption();
         try {
-            AcordeonLogEntry[] allEntrys = this.server.getEliminationLogs();
+            switch(selectedOption){
+                case "Creaciones":
+                    allEntries = this.server.getCreationLogs();
+                    break;
+                case "Ediciones":
+                    allEntries = this.server.getEditionLogs();
+                    break;
+                case "Eliminaciones":
+                    allEntries = this.server.getEliminationLogs();
+                    break;
+                default:
+                    allEntries = null;
+                    break;
+            }
             
-            if( allEntrys != null ){
+            if( allEntries != null ){
                 
-                for(int i=0; i < allEntrys.length; i++){
+                for(int i=0; i < allEntries.length; i++){
                 
                     Object[] newConcept = {
-                        allEntrys[i].getUserName(),
-                        allEntrys[i].getConceptName(),
-                        allEntrys[i].getCategory(),
-                        allEntrys[i].getDate()
+                        allEntries[i].getUserName(),
+                        allEntries[i].getConceptName(),
+                        allEntries[i].getCategory(),
+                        allEntries[i].getDate()
                     };
                     this.view.getLogList().addRow( newConcept );
                 }

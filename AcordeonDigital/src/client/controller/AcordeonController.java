@@ -1,5 +1,6 @@
 package client.controller;
 
+import client.model.AcordeonList;
 import client.view.AcordeonSheet;
 import client.model.ClientInterface;
 import common.ConceptEntry;
@@ -28,7 +29,8 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
         this.view = new AcordeonSheet();
         
         this.server = server;
-        //this.server.registerForCallback(this);
+        this.server.registerForAcordeonChangeCallback(this);
+        
         this.addActionListeners();
         this.setTableProperties();
         this.fillTable();
@@ -113,6 +115,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     private void showAddForm(){
         
         try {
+            this.server.unregisterForAcordeonChangeCallback(this);
             this.view.dispose();
             AddController callbackObj = new AddController(server);
         
@@ -125,6 +128,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     private void showModForm( ConceptEntry input_concept ){
         
         try {
+            this.server.unregisterForAcordeonChangeCallback(this);
             this.view.dispose();
             ModController callbackObj = new ModController( input_concept, server );
         
@@ -137,6 +141,7 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     private void showLogSheet(){
         
         try {
+            this.server.unregisterForAcordeonChangeCallback(this);
             this.view.dispose();
             LogController callbackObj = new LogController( server );
         
@@ -145,10 +150,30 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
             ex.printStackTrace();
         }
     }
+    
+    private void resetTable(){
+        
+        this.view.setAcordeonList( new AcordeonList(0) );
+    }
 
     @Override
     public void notifyAcordeonChanges(ConceptEntry[] updatedConceptEntrys) throws RemoteException {
         
+        this.resetTable();
+        
+        if ( updatedConceptEntrys != null ) {
+
+            for (int i = 0; i < updatedConceptEntrys.length; i++) {
+
+                Object[] newConcept = {
+                    updatedConceptEntrys[i].getId(),
+                    updatedConceptEntrys[i].getConceptName(),
+                    updatedConceptEntrys[i].getCategory(),
+                    updatedConceptEntrys[i].getDefinition()
+                };
+                this.view.getAcordeonList().addRow(newConcept);
+            }
+        }
     }
     
 }
