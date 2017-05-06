@@ -146,7 +146,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                 EliminationDAO.getEliminationDAO().registerElimination(conceptEntry, userId);
                 
                 //Si el tema fué eliminado automaticamente, se registra también
-                if(ConceptsDAO.getConceptsDAO().doesCategoryExist(conceptEntry.getCategory())){
+                if(!ConceptsDAO.getConceptsDAO().doesCategoryExist(conceptEntry.getCategory())){
                     
                     EliminationDAO.getEliminationDAO().registerElimination(
                             new ConceptEntry (
