@@ -6,6 +6,7 @@
 package server;
 
 import client.model.ClientInterface;
+import com.sun.javafx.animation.TickCalculation;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
 import java.rmi.RemoteException;
@@ -17,6 +18,9 @@ import java.util.logging.Logger;
 import server.daos.ConceptsDAO;
 import server.daos.CreationsDAO;
 import common.DAOErrorCodes;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
 import server.daos.EditionsDAO;
 import server.daos.EliminationDAO;
 import server.daos.UsersDAO;
@@ -28,6 +32,8 @@ import server.daos.UsersDAO;
 public class Server extends UnicastRemoteObject implements ServerInterface {
 
     private ArrayList<Integer> conceptsBeingEdited;
+    private final int TIME_TO_EDIT = 180000;
+    
     private final int SYSTEMS_USER_ID = -69;
     
     private final ArrayList clientList;
@@ -43,11 +49,33 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         
         if(!conceptsBeingEdited.contains(new Integer(conceptID))){
             conceptsBeingEdited.add(new Integer(conceptID));
+            
+            setTimerToRemovePermission(conceptID);
+            
             return true;
         }
         else{
             return false;
         }
+    }
+    
+    private void setTimerToRemovePermission(int conceptID) {
+        
+       Timer timer = new Timer(this.TIME_TO_EDIT, new ActionListener() {
+
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               
+               try {
+                   relesePermisionToModifyConcept(conceptID);
+               } catch (RemoteException ex) {
+                   Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           }
+       });
+       
+       timer.setRepeats(false);
+       timer.start();
     }
 
     @Override
@@ -269,5 +297,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    
     
 }
