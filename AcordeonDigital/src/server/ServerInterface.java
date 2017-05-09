@@ -38,4 +38,8 @@ public interface ServerInterface extends Remote {
     public void registerForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException;
     
     public void unregisterForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException;
+    
+    public boolean requestPermisionToModifyConcept(int conceptID) throws RemoteException;
+    
+    public boolean relesePermisionToModifyConcept(int conceptID) throws RemoteException;
 }

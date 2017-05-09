@@ -39,6 +39,30 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
     }
 
     @Override
+    public synchronized boolean requestPermisionToModifyConcept(int conceptID) throws RemoteException {
+        
+        if(!conceptsBeingEdited.contains(new Integer(conceptID))){
+            conceptsBeingEdited.add(new Integer(conceptID));
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    @Override
+    public synchronized boolean relesePermisionToModifyConcept(int conceptID) throws RemoteException {
+        
+        if(conceptsBeingEdited.contains(new Integer(conceptID))){
+            conceptsBeingEdited.remove(new Integer(conceptID));
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    @Override
     public int getUserId(String userName, String password) throws RemoteException {
 
         try {
@@ -100,9 +124,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         boolean isConceptBeingEdited = this.conceptsBeingEdited.contains(conceptId);
 
         //si el concepto no se está editando, se pone bajo edición y se guarda
-        if (!isConceptBeingEdited) {
-
-            this.conceptsBeingEdited.add(conceptId);
+        if (isConceptBeingEdited) {
 
             try {
 
@@ -114,8 +136,6 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             } catch (SQLException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            this.conceptsBeingEdited.remove(conceptId);
             
             this.doCallbacks();
             return true;
@@ -137,9 +157,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             boolean isConceptCreator = conceptCreatorID == userId;
 
             //si el concepto no se está editando, se pone bajo edición y se elimina
-            if (!isConceptBeingEdited && isConceptCreator) {
-
-                this.conceptsBeingEdited.add(conceptId);
+            if (isConceptBeingEdited && isConceptCreator) {
                 
                 //llamada al DAO para eliminar el concepto
                 ConceptsDAO.getConceptsDAO().deleteConceptEntry(conceptEntry.getId());
@@ -158,8 +176,6 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                             ),
                             this.SYSTEMS_USER_ID);
                 }
-                
-                this.conceptsBeingEdited.remove(conceptId);
                 
                 this.doCallbacks();
                 return true;
