@@ -42,6 +42,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         this.view.setResizable(false);
         this.view.setVisible(true);
         this.view.getBtn_ModConcept().setEnabled(false);
+        this.view.getBtn_Delete().setEnabled(false);
         
         this.modConcept = modConcept;
         this.view.getLbl_realName().setText( this.modConcept.getConceptName() );
@@ -64,6 +65,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
             );
             if(this.isPermitedToModify){
                 this.view.getBtn_ModConcept().setEnabled(true);
+                this.view.getBtn_Delete().setEnabled(true);
             }
             
         } catch (RemoteException ex) {
