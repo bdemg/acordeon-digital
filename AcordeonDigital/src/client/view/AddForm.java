@@ -56,7 +56,7 @@ public class AddForm extends javax.swing.JFrame {
 
         btn_AddConcept.setText("Añadir");
 
-        btn_Exit.setText("Cancelar");
+        btn_Exit.setText("Regresar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

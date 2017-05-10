@@ -6,6 +6,7 @@ import client.model.LogList;
 import client.view.LogSheet;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
+import common.UserIDManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -25,6 +26,12 @@ public class LogController extends UnicastRemoteObject implements ActionListener
     public LogController( ServerInterface server ) throws RemoteException{
         
         this.view = new LogSheet();
+        this.view.setLocationRelativeTo(null);
+        this.view.setResizable(false);
+        this.view.setVisible(true);
+        
+        String userId = String.valueOf(UserIDManager.callManager().getUserID());
+        this.view.setTitle("Bitácora - "+userId);
         
         this.server = server;
         this.setTableProperties();
@@ -44,9 +51,6 @@ public class LogController extends UnicastRemoteObject implements ActionListener
     
     private void setTableProperties(){
         
-        this.view.setLocationRelativeTo(null);
-        this.view.setResizable(false);
-        this.view.setVisible(true);
         this.view.getTable_Log().setAutoCreateRowSorter(true);
     }
     

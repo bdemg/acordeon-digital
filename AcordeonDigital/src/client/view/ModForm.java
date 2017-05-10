@@ -62,7 +62,7 @@ public class ModForm extends javax.swing.JFrame {
 
         lbl_realCategory.setText("...");
 
-        btn_Exit.setText("Cancelar");
+        btn_Exit.setText("Regresar");
 
         btn_Delete.setText("Eliminar");
 

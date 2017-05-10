@@ -31,6 +31,9 @@ public class AddController extends UnicastRemoteObject implements ActionListener
         this.view.setResizable(false);
         this.view.setVisible(true);
         
+        String userId = String.valueOf(UserIDManager.callManager().getUserID());
+        this.view.setTitle("Añadir - "+userId);
+        
         this.server = server;
         this.addActionListeners();
     }

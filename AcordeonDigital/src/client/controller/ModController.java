@@ -33,12 +33,15 @@ public class ModController extends UnicastRemoteObject implements ActionListener
     private ConceptEntry modConcept;
     private int userId;
     
+    private boolean isPermitedToModify;
+    
     public ModController( ConceptEntry modConcept, ServerInterface server ) throws RemoteException{
         
         this.view = new ModForm();
         this.view.setLocationRelativeTo(null);
         this.view.setResizable(false);
         this.view.setVisible(true);
+        this.view.getBtn_ModConcept().setEnabled(false);
         
         this.modConcept = modConcept;
         this.view.getLbl_realName().setText( this.modConcept.getConceptName() );
@@ -46,9 +49,38 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         this.view.getTxta_Definition().setText( this.modConcept.getDefinition() );
         
         this.userId = UserIDManager.callManager().getUserID();
+        this.view.setTitle("Modificar - "+userId);
         
         this.server = server;
         this.addActionListeners();
+        this.setupPermisionToModify();
+    }
+    
+    private void setupPermisionToModify(){
+        
+        try {
+            this.isPermitedToModify = this.server.requestPermisionToModifyConcept(
+                    this.modConcept.getId()
+            );
+            if(this.isPermitedToModify){
+                this.view.getBtn_ModConcept().setEnabled(true);
+            }
+            
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    private void cancelPermisionToModify(){
+        
+        try {
+            if(this.isPermitedToModify){
+                this.server.relesePermisionToModifyConcept(this.modConcept.getId());
+            }
+            
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
     }
     
     private void addActionListeners(){
@@ -142,6 +174,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
     private void returnToAcordeon(){
         
         try {
+            this.cancelPermisionToModify();
             this.view.dispose();
             AcordeonController callbackObj = new AcordeonController(server);
         

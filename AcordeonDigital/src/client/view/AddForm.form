@@ -125,7 +125,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btn_Exit">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Cancelar"/>
+        <Property name="text" type="java.lang.String" value="Regresar"/>
       </Properties>
     </Component>
   </SubComponents>

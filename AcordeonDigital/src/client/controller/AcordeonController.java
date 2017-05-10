@@ -4,6 +4,7 @@ import client.model.AcordeonList;
 import client.view.AcordeonSheet;
 import client.model.ClientInterface;
 import common.ConceptEntry;
+import common.UserIDManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -27,6 +28,12 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     public AcordeonController( ServerInterface server ) throws RemoteException{
         
         this.view = new AcordeonSheet();
+        this.view.setLocationRelativeTo(null);
+        this.view.setResizable(false);
+        this.view.setVisible(true);
+        
+        String userId = String.valueOf(UserIDManager.callManager().getUserID());
+        this.view.setTitle("Acordeón - "+userId);
         
         this.server = server;
         this.server.registerForAcordeonChangeCallback(this);
@@ -38,9 +45,6 @@ public class AcordeonController extends UnicastRemoteObject implements ActionLis
     
     private void setTableProperties(){
         
-        this.view.setLocationRelativeTo(null);
-        this.view.setResizable(false);
-        this.view.setVisible(true);
         this.view.getTable_Concepts().setAutoCreateRowSorter(true);
         
         this.view.getTable_Concepts().addMouseListener( new MouseAdapter(){
