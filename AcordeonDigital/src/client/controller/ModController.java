@@ -198,6 +198,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         //si es así pues se cierra la ventana
         if( this.modConcept.getId() == conceptID ){
             this.view.dispose();
+            this.server.unregisterForModTimeoutCallback(this);
             AcordeonController callbackObj = new AcordeonController(server);
         }
     }
