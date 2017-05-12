@@ -33,7 +33,7 @@ import server.daos.UsersDAO;
 public class Server extends UnicastRemoteObject implements ServerInterface {
 
     private ArrayList<Integer> conceptsBeingEdited;
-    private final int TIME_TO_EDIT = 180000;
+    private final int TIME_TO_EDIT = 30000;
 
     private final int SYSTEMS_USER_ID = -69;
 

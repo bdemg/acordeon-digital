@@ -68,6 +68,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
                 this.view.getBtn_ModConcept().setEnabled(true);
                 this.view.getBtn_Delete().setEnabled(true);
                 //si obtiene permiso para modificar que se registre para callback de timeout
+                this.server.registerForModTimeoutCallback(this);
             }
             
         } catch (RemoteException ex) {
@@ -180,6 +181,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         try {
             this.cancelPermisionToModify();
             //aquí se quitaría del registro para callbacks
+            this.server.unregisterForModTimeoutCallback(this);
             this.view.dispose();
             AcordeonController callbackObj = new AcordeonController(server);
         
@@ -194,7 +196,10 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         
         //aquí se puede checar si la id del concepto que se recibe es la misma de la que se está editando
         //si es así pues se cierra la ventana
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if( this.modConcept.getId() == conceptID ){
+            this.view.dispose();
+            AcordeonController callbackObj = new AcordeonController(server);
+        }
     }
 
     
