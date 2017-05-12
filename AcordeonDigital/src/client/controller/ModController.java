@@ -7,6 +7,7 @@ package client.controller;
 
 import client.controller.AcordeonController;
 import client.model.ClientInterface;
+import client.model.ClientModInterface;
 import client.view.ModForm;
 import common.ConceptEntry;
 import common.ConfirmationMessager;
@@ -25,7 +26,7 @@ import server.ServerInterface;
  *
  * @author Antonio Soto
  */
-public class ModController extends UnicastRemoteObject implements ActionListener, ClientInterface{
+public class ModController extends UnicastRemoteObject implements ActionListener, ClientModInterface{
     
     private final ModForm view;
     private final ServerInterface server;
@@ -66,6 +67,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
             if(this.isPermitedToModify){
                 this.view.getBtn_ModConcept().setEnabled(true);
                 this.view.getBtn_Delete().setEnabled(true);
+                //si obtiene permiso para modificar que se registre para callback de timeout
             }
             
         } catch (RemoteException ex) {
@@ -177,6 +179,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         
         try {
             this.cancelPermisionToModify();
+            //aquí se quitaría del registro para callbacks
             this.view.dispose();
             AcordeonController callbackObj = new AcordeonController(server);
         
@@ -187,8 +190,12 @@ public class ModController extends UnicastRemoteObject implements ActionListener
     }
 
     @Override
-    public void notifyAcordeonChanges(ConceptEntry[] updatedConceptEntrys) throws RemoteException {
+    public void notifyModTimeout(int conceptID) throws RemoteException {
         
+        //aquí se puede checar si la id del concepto que se recibe es la misma de la que se está editando
+        //si es así pues se cierra la ventana
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     
 }

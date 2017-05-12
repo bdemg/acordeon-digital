@@ -6,6 +6,7 @@
 package server;
 
 import client.model.ClientInterface;
+import client.model.ClientModInterface;
 import com.sun.javafx.animation.TickCalculation;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
@@ -33,63 +34,65 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
 
     private ArrayList<Integer> conceptsBeingEdited;
     private final int TIME_TO_EDIT = 180000;
-    
+
     private final int SYSTEMS_USER_ID = -69;
-    
+
     private final ArrayList clientList;
+    private final ArrayList clientModList;
 
     public Server() throws RemoteException {
 
         conceptsBeingEdited = new ArrayList<>();
         clientList = new ArrayList();
+        clientModList = new ArrayList();
     }
 
     @Override
     public synchronized boolean requestPermisionToModifyConcept(int conceptID) throws RemoteException {
-        
-        if(!conceptsBeingEdited.contains(new Integer(conceptID))){
+
+        if (!conceptsBeingEdited.contains(new Integer(conceptID))) {
             conceptsBeingEdited.add(new Integer(conceptID));
-            
+
             setTimerToRemovePermission(conceptID);
-            
+
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
-    
-    private void setTimerToRemovePermission(int conceptID) {
-        
-       Timer timer = new Timer(this.TIME_TO_EDIT, new ActionListener() {
 
-           @Override
-           public void actionPerformed(ActionEvent e) {
-               
-               try {
-                   relesePermisionToModifyConcept(conceptID);
-               } catch (RemoteException ex) {
-                   Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-               }
-           }
-       });
-       
-       timer.setRepeats(false);
-       timer.start();
+    private void setTimerToRemovePermission(int conceptID) {
+
+        Timer timer = new Timer(this.TIME_TO_EDIT, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    
+                    doTimeoutCallbacks(conceptID);
+                    relesePermisionToModifyConcept(conceptID);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+
+        timer.setRepeats(false);
+        timer.start();
     }
 
     @Override
     public synchronized boolean relesePermisionToModifyConcept(int conceptID) throws RemoteException {
-        
-        if(conceptsBeingEdited.contains(new Integer(conceptID))){
+
+        if (conceptsBeingEdited.contains(new Integer(conceptID))) {
             conceptsBeingEdited.remove(new Integer(conceptID));
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
-    
+
     @Override
     public int getUserId(String userName, String password) throws RemoteException {
 
@@ -109,19 +112,19 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             ConceptsDAO conceptsDAO = ConceptsDAO.getConceptsDAO();
 
             conceptsDAO.registerNewConcept(conceptEntry);
-            
+
             //Se crea una entrada en el registro de creación de conceptos
             int newConceptID = conceptsDAO.getConceptID(conceptEntry.getConceptName());
-            
+
             CreationsDAO.getCreationsDAO().registerNewConceptCreation(
-                    userId, 
+                    userId,
                     new ConceptEntry(
                             newConceptID,
                             conceptEntry.getConceptName(),
                             conceptEntry.getCategory(),
                             conceptEntry.getDefinition())
             );
-            
+
             this.doCallbacks();
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -164,7 +167,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             } catch (SQLException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             this.doCallbacks();
             return true;
         } else {
@@ -186,17 +189,17 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
 
             //si el concepto no se está editando, se pone bajo edición y se elimina
             if (isConceptBeingEdited && isConceptCreator) {
-                
+
                 //llamada al DAO para eliminar el concepto
                 ConceptsDAO.getConceptsDAO().deleteConceptEntry(conceptEntry.getId());
                 //registrar el concepto que se eliminó
                 EliminationDAO.getEliminationDAO().registerElimination(conceptEntry, userId);
-                
+
                 //Si el tema fué eliminado automaticamente, se registra también
-                if(!ConceptsDAO.getConceptsDAO().doesCategoryExist(conceptEntry.getCategory())){
-                    
+                if (!ConceptsDAO.getConceptsDAO().doesCategoryExist(conceptEntry.getCategory())) {
+
                     EliminationDAO.getEliminationDAO().registerElimination(
-                            new ConceptEntry (
+                            new ConceptEntry(
                                     0,
                                     "",
                                     conceptEntry.getCategory(),
@@ -204,7 +207,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                             ),
                             this.SYSTEMS_USER_ID);
                 }
-                
+
                 this.doCallbacks();
                 return true;
             } else {
@@ -215,13 +218,13 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return false;
     }
 
     @Override
     public AcordeonLogEntry[] getCreationLogs() throws RemoteException {
-        
+
         try {
             return CreationsDAO.getCreationsDAO().getAllCreationLogs();
         } catch (SQLException ex) {
@@ -232,7 +235,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
 
     @Override
     public AcordeonLogEntry[] getEditionLogs() throws RemoteException {
-        
+
         try {
             return EditionsDAO.getEditionsDAO().getAllEditionLogs();
         } catch (SQLException ex) {
@@ -243,7 +246,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
 
     @Override
     public AcordeonLogEntry[] getEliminationLogs() throws RemoteException {
-        
+
         try {
             return EliminationDAO.getEliminationDAO().getAllEliminationLogs();
         } catch (SQLException ex) {
@@ -251,20 +254,19 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         }
         return null;
     }
-    
-    
+
     @Override
-    public void registerForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException{
-        
+    public void registerForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException {
+
         if (!(clientList.contains(callbackObject))) {
             clientList.add(callbackObject);
             System.out.println("Registered new client ");
         }
     }
-    
+
     @Override
-    public void unregisterForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException{
-        
+    public void unregisterForAcordeonChangeCallback(ClientInterface callbackObject) throws RemoteException {
+
         if (clientList.remove(callbackObject)) {
             System.out.println("Unregistered client ");
         } else {
@@ -272,15 +274,15 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
                     "unregister: client wasn't registered.");
         }
     }
-    
+
     private void doCallbacks() throws RemoteException {
 
         try {
             // make callback to each registered client
             System.out.println(
                     "**************************************\n"
-                            + "Callbacks initiated ---");
-            
+                    + "Callbacks initiated ---");
+
             ConceptEntry[] conceptEntrys = ConceptsDAO.getConceptsDAO().getAllConcepts();
             for (int i = 0; i < clientList.size(); i++) {
                 System.out.println("doing " + i + "-th callback\n");
@@ -298,6 +300,43 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         }
     }
 
-    
-    
+    @Override
+    public void registerForModTimeoutCallback(ClientModInterface callbackObject) throws RemoteException {
+
+        if (!(clientModList.contains(callbackObject))) {
+            clientModList.add(callbackObject);
+            System.out.println("Registered new client ");
+        }
+    }
+
+    @Override
+    public void unregisterForModTimeoutCallback(ClientModInterface callbackObject) throws RemoteException {
+
+        if (clientModList.remove(callbackObject)) {
+            System.out.println("Unregistered client ");
+        } else {
+            System.out.println(
+                    "unregister: client wasn't registered.");
+        }
+    }
+
+    private void doTimeoutCallbacks(int conceptID) throws RemoteException {
+
+        // make callback to each registered client
+        System.out.println(
+                "**************************************\n"
+                + "Callbacks initiated ---");
+
+        for (int i = 0; i < clientModList.size(); i++) {
+            System.out.println("doing " + i + "-th callback\n");
+            // convert the vector object to a callback object
+            ClientModInterface nextClient
+                    = (ClientModInterface) clientModList.get(i);
+            // invoke the callback method
+            nextClient.notifyModTimeout(conceptID);
+        }// end for
+        System.out.println("********************************\n"
+                + "Server completed callbacks ---");
+    } // doCallbacks
+
 }

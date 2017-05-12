@@ -6,6 +6,7 @@
 package server;
 
 import client.model.ClientInterface;
+import client.model.ClientModInterface;
 import common.AcordeonLogEntry;
 import common.ConceptEntry;
 import java.rmi.Remote;
@@ -42,4 +43,8 @@ public interface ServerInterface extends Remote {
     public boolean requestPermisionToModifyConcept(int conceptID) throws RemoteException;
     
     public boolean relesePermisionToModifyConcept(int conceptID) throws RemoteException;
+    
+    public void registerForModTimeoutCallback(ClientModInterface callbackObject) throws RemoteException;
+    
+    public void unregisterForModTimeoutCallback(ClientModInterface callbackObject) throws RemoteException;
 }
