@@ -21,6 +21,7 @@ import server.daos.CreationsDAO;
 import common.DAOErrorCodes;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import javax.swing.Timer;
 import server.daos.EditionsDAO;
 import server.daos.EliminationDAO;
@@ -32,28 +33,31 @@ import server.daos.UsersDAO;
  */
 public class Server extends UnicastRemoteObject implements ServerInterface {
 
-    private ArrayList<Integer> conceptsBeingEdited;
-    private final int TIME_TO_EDIT = 30000;
+    private final ArrayList<Integer> conceptsBeingEdited;
+    private final int TIME_TO_EDIT = 10000;
 
     private final int SYSTEMS_USER_ID = -69;
 
     private final ArrayList clientList;
     private final ArrayList clientModList;
+    
+    private final HashMap<ClientModInterface, Timer> timers;
 
     public Server() throws RemoteException {
 
         conceptsBeingEdited = new ArrayList<>();
         clientList = new ArrayList();
         clientModList = new ArrayList();
+        timers = new HashMap<>();
     }
 
     @Override
-    public synchronized boolean requestPermisionToModifyConcept(int conceptID) throws RemoteException {
+    public synchronized boolean requestPermisionToModifyConcept(ClientModInterface client, int conceptID) throws RemoteException {
 
         if (!conceptsBeingEdited.contains(new Integer(conceptID))) {
             conceptsBeingEdited.add(new Integer(conceptID));
 
-            setTimerToRemovePermission(conceptID);
+            setTimerToRemovePermission(client, conceptID);
 
             return true;
         } else {
@@ -61,7 +65,7 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
         }
     }
 
-    private void setTimerToRemovePermission(int conceptID) {
+    private void setTimerToRemovePermission(ClientModInterface client, int conceptID) {
 
         Timer timer = new Timer(this.TIME_TO_EDIT, new ActionListener() {
 
@@ -78,6 +82,8 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
             }
         });
 
+        this.timers.put(client, timer);
+        
         timer.setRepeats(false);
         timer.start();
     }
@@ -314,12 +320,22 @@ public class Server extends UnicastRemoteObject implements ServerInterface {
 
         if (clientModList.remove(callbackObject)) {
             System.out.println("Unregistered client ");
+            stopTimer(this.timers.get(callbackObject));
+            this.timers.remove(callbackObject);
         } else {
             System.out.println(
                     "unregister: client wasn't registered.");
         }
     }
 
+    private void stopTimer(Timer timer) {
+        
+        if(timer.isRunning()){
+            
+            timer.stop();
+        }
+    }
+    
     private void doTimeoutCallbacks(int conceptID) throws RemoteException {
 
         // make callback to each registered client

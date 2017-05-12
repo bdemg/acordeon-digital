@@ -62,6 +62,7 @@ public class ModController extends UnicastRemoteObject implements ActionListener
         
         try {
             this.isPermitedToModify = this.server.requestPermisionToModifyConcept(
+                    this,
                     this.modConcept.getId()
             );
             if(this.isPermitedToModify){
